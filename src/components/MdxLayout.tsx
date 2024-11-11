@@ -1,11 +1,12 @@
-import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import React, { useState, useEffect } from "react";
-import { useRouter, usePathname } from "next/navigation";
+import Header from "@/components/Header";
+import SEO from "@/components/SEO";
+import { usePathname, useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
 
 import CopyIcon from "@/image/icons/copy.svg";
-import Prism from "prismjs";
 import { ArrowLeftIcon } from "@heroicons/react/20/solid";
+import Prism from "prismjs";
 
 import data from "@/data/krakend.json";
 
@@ -58,6 +59,13 @@ export default function MdxLayout({
 
   return (
     <>
+      <SEO
+        title={`${name} | KrakenD Playground`}
+        description={
+          currentUseCase?.extra_config?.["documentation/openapi"]?.summary ||
+          currentUseCase?.extra_config?.["documentation/openapi"]?.description
+        }
+      />
       <Header />
       <div className="bg-brand-neutral-900 text-white">
         <div className="container--boxed-xl py-8">

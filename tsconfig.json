@@ -36,7 +36,10 @@
       ],
       "@/data/*": [
         "./public/data/*"
-      ]
+      ],
+      "@/utils/*": [
+        "./src/utils/*"
+      ],
     }
   },
   "include": [

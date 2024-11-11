@@ -4,6 +4,7 @@ import integrationData from "@/data/integrations.json";
 import { ArrowLeftIcon } from "@heroicons/react/20/solid";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
+import SEO from "./SEO";
 
 const IntegrationLayout = ({ children }) => {
   const router = useRouter();
@@ -23,6 +24,11 @@ const IntegrationLayout = ({ children }) => {
 
   return (
     <>
+      <SEO
+        title={`${integration.title} | KrakenD Playground`}
+        description={integration.description}
+      />
+
       <Header />
 
       <div className="bg-brand-neutral-900 text-white">

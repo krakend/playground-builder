@@ -1,5 +1,6 @@
 import { Integration, UseCases } from "@/components/Home";
 import Layout from "@/components/Layout";
+import SEO from "@/components/SEO";
 import data from "@/data/krakend.json";
 import Architecture from "@/image/architecture.svg";
 import BGPurplePattern from "@/image/background/bg-pattern-purple.webp";
@@ -12,6 +13,8 @@ const Index = ({ useCases }) => {
 
   return (
     <Layout>
+      <SEO />
+
       {/* Hero */}
       <section className="bg-brand-neutral-900 section--sm relative">
         <div className="container--boxed">
@@ -116,7 +119,7 @@ const Index = ({ useCases }) => {
             Questions?
           </h2>
           <Link
-            href={"mailto:support@krakend.io?subject=Enterprise-docs"}
+            href={"https://www.krakend.io/support/"}
             className="button--primary"
           >
             Ask Support
