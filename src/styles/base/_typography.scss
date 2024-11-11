@@ -39,3 +39,22 @@
     @apply text-brand-neutral-900 no-underline hover:scale-105;
   }
 }
+
+.prose--mdx pre code {
+  background-color: #1d1f21;
+}
+
+.prose--mdx :where(code):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
+  background-color: #292b2e;
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+
+
+.prose--mdx :where(code):not(:where([class~="not-prose"], [class~="not-prose"] *))::before {
+  content: none;
+}
+
+.prose--mdx :where(code):not(:where([class~="not-prose"], [class~="not-prose"] *))::after {
+  content: none;
+}
