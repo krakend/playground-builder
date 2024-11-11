@@ -1,8 +1,31 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+
+# Krakend Playground Demo Builder
+
+This repository contains the codebase for generating the Krakend Playground demo website using Next.js.
 
 ## Getting Started
 
-First, run the development server:
+### Installation
+
+1. Install dependencies:
+
+   ```bash
+   npm install
+   ```
+
+### Configuration
+
+Create a `.env` file in the root of your project with the following content:
+
+```bash
+NEXT_PUBLIC_KRAKEND_LICENSE_TYPE=enterprise
+```
+
+The `NEXT_PUBLIC_KRAKEND_LICENSE_TYPE` environment variable can be set to either `"enterprise"` or `"open-source"` depending on which playground you want to generate.
+
+### Running the Development Server
+
+To start the development server, you can use one of the following commands:
 
 ```bash
 npm run dev
@@ -14,23 +37,25 @@ pnpm dev
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) in your browser to view the project.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Adding or Updating Use-Case Demo Pages
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+You can add or edit use-case demo pages by modifying the `.mdx` files located in the `pages/use-cases` directory.
 
-## Learn More
+#### Sample File for a New Use-Case
 
-To learn more about Next.js, take a look at the following resources:
+To create a new use-case page, you can use the following structure in a `.mdx` file:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```mdx
+import MdxLayout from '@/components/MdxLayout';
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## About this demo
+- One
+- Two
+- Three
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+export default function MDXPage({ children }) {
+  return <MdxLayout>{children}</MdxLayout>
+}
+```
