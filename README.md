@@ -39,6 +39,15 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) in your browser to view the project.
 
+### Building the Project
+
+To build the project, you can use the following command:
+
+```bash
+npm run build
+```
+This will generate an `out` directory with the static HTML, CSS, and JavaScript files.
+
 ### Adding or Updating Use-Case Demo Pages
 
 You can add or edit use-case demo pages by modifying the `.mdx` files located in the `pages/use-cases` directory.
