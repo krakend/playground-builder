@@ -1,12 +1,11 @@
-import Layout from "@/components/Layout";
 import { Integration, UseCases } from "@/components/Home";
-// import Architecture from "@/components/Architecture";
+import Layout from "@/components/Layout";
+import data from "@/data/krakend.json";
+import Architecture from "@/image/architecture.svg";
 import BGPurplePattern from "@/image/background/bg-pattern-purple.webp";
 import Image from "next/image";
 import Link from "next/link";
-import { FC, useState } from "react";
-import data from "@/data/krakend.json";
-import Architecture from "@/image/architecture.svg";
+import { useState } from "react";
 
 const Index = ({ useCases }) => {
   const [currentTab, setCurrentTab] = useState("use-cases");
@@ -24,12 +23,27 @@ const Index = ({ useCases }) => {
             className="absolute top-8 left-1/2 -translate-x-1/2 z-0"
           />
           <div className="relative z-10">
-            <h1 className="heading--h1 flex flex-col items-center text-center mb-4 md:mb-7">
-              <span className="text-white">KrakenD Enterprise</span>
-              <span className="text-gradient--lavender leading-normal">
-                Playground
+            {process.env.NEXT_PUBLIC_KRAKEND_LICENSE_TYPE === "open-source" && (
+              <span className="text-white tracking-wider uppercase text-center block mx-auto mb-2">
+                Open Source
               </span>
-            </h1>
+            )}
+            {process.env.NEXT_PUBLIC_KRAKEND_LICENSE_TYPE === "open-source" ? (
+              <h1 className="heading--h1 items-center text-center mb-4 md:mb-7 justify-center">
+                <span className="text-white">KrakenD </span>{" "}
+                <span className="text-gradient--lavender leading-normal">
+                  Playground
+                </span>
+              </h1>
+            ) : (
+              <h1 className="heading--h1 flex flex-col items-center text-center mb-4 md:mb-7">
+                <span className="text-white">KrakenD Enterprise</span>
+                <span className="text-gradient--lavender leading-normal">
+                  Playground
+                </span>
+              </h1>
+            )}
+
             <p
               className="text-brand-neutral-300 text--lg text-center mx-auto"
               style={{ maxWidth: "722px" }}

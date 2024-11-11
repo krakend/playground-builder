@@ -1,7 +1,7 @@
 import IntegrationLayout from '@/components/IntegrationLayout';
 
 ## About this demo
-The API key authentication enables a Role-Based Access Control (RBAC) mechanism by reading the Authorization header of incoming requests.
+OpenAPI/Swagger documentation can be generated with `krakend generate openapi.`
 
 ## Endpoint
 ```
@@ -10,8 +10,9 @@ http://localhost:16686/search
 
 ## Command
 ```
-curl -iG -H 'Authorization: Bearer 58427514-be32-0b52-b7c6-d01fada30497' http://localhost:8080/api-key
+docker-compose exec krakend_ee krakend openapi export -c /etc/krakend/krakend.json -o /etc/krakend/demo/swagger.json
 ```
+
 
 export default function MDXPage({ children }) {
   return <IntegrationLayout>{children}</IntegrationLayout>
