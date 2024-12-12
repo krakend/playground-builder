@@ -25,13 +25,18 @@ export default function MdxLayout({
 
   const currentUseCase = useCases.find((useCase) => {
     let [tag, name] = useCase["@comment"].split(":");
+    let endpoint = useCase.endpoint;
     name = name.trim();
     tag = tag.trim();
-    let slug = name
+    let slug = endpoint
       .toLowerCase()
       .replace(/ /g, "-")
-      .replace(/[^a-zA-Z0-9-]/g, "")
-      .replace(/--+/g, "-");
+      .replace(/_/g, "-")
+      .replace(/[^a-z0-9/-]/g, "")
+      .replace(/(?!^)\//g, "-")
+      .replace(/--+/g, "-")
+      .replace(/-$/g, "")
+      .replace("/", "");
 
     return slug === useCaseSlug;
   });

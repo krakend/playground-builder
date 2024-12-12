@@ -138,16 +138,18 @@ export const getStaticProps = async () => {
   // In each endpoint, split the @comment by `:` and set the first part as tag, and the second part as name. Set the tag and name in "custom_fields" object
   const useCases = endpoints.map((endpoint) => {
     let [tag, name] = endpoint["@comment"].split(":");
-
     name = name.trim();
     tag = tag.trim();
 
-    let slug = name
+    let slug = endpoint.endpoint
       .toLowerCase()
       .replace(/ /g, "-")
-      .replace(/[^a-zA-Z0-9-]/g, "")
-      .replace(/--+/g, "-");
-
+      .replace(/_/g, "-")
+      .replace(/[^a-z0-9/-]/g, "")
+      .replace(/(?!^)\//g, "-")
+      .replace(/--+/g, "-")
+      .replace(/-$/g, "")
+      .replace("/", "");
     let category =
       endpoint?.extra_config?.["documentation/openapi"]?.tags?.[0] || "Others";
     category = category.toLowerCase().replace(/ /g, "_");
