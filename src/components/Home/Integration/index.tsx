@@ -3,6 +3,10 @@ import Image from "next/image";
 import Link from "next/link";
 
 const Integration = () => {
+  const licenseType =
+    process.env?.NEXT_PUBLIC_KRAKEND_LICENSE_TYPE === "enterprise"
+      ? "enterprise"
+      : "open-source";
   return (
     <div
       className="py-5 px-6 flex flex-col rounded-xl"
@@ -15,7 +19,7 @@ const Integration = () => {
         return (
           <Link
             key={index}
-            href={`/integrations/${singleIntegrationData.slug}`}
+            href={`/integrations/${licenseType}/${singleIntegrationData.slug}`}
             className="flex flex-col gap-2 p-4 mb-4 rounded-md border border-brand-neutral-600 hover:outline hover:outline-brand-neutral-300 transition-colors shadow-md"
           >
             <div className="flex items-center gap-3 mb-4">
