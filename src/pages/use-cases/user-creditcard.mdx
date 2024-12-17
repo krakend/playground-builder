@@ -1,14 +1,25 @@
 import MdxLayout from '@/components/MdxLayout';
 
-## About this demo
-- One
-- Two
-- Three
-
 ## Endpoint
 ```
-/
+/user/creditcard
 ```
+
+## Content manipulation with regular expressions
+This endpoint calls a backend that returns user information, from which we want to retrieve only the `credit_card` field. Instead of returning the credit card number, the plugin replaces the numbers to show only the last 4 digits.
+
+The regexp used in this example is `"find": "^.*(\\d{4})"` and we replace the captured group with `XXXX-${1}`, so a string like `1234-56789-1234-5678` becomes `XXXX-5678`.
+This is a ridiculous, non-real-life example to illustrate the replacement.
+
+
+See the replaced credit card here:
+
+[http://localhost:8080/user/creditcard](http://localhost:8080/user/creditcard)
+
+See the original credit card number here:
+
+[http://localhost:8080/fake-api/user/1.json](http://localhost:8080/fake-api/user/1.json)
+
 
 export default function MDXPage({ children }) {
   return <MdxLayout>{children}</MdxLayout>

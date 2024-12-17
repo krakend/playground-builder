@@ -6,14 +6,19 @@ import WebSocketChat from '@/components/WebSocketChat'
 /chat/ws/{room}
 ```
 
-## About this demo
-- One
-- Two
-- Three
+## Chat room using WebSockets
+The endpoint `/chat/ws/{room}` creates a WebSockets connection to the selected `{room}` using Multiplexing.
 
+Choose a room name and connect the two clients below to create two independent WS connections. You can open multiple times the same page.
+
+See the [WebSockets documentation](https://www.krakend.io/docs/enterprise/websockets/).
+
+### Client 1
 <WebSocketChat/>
+### Client 2
 <WebSocketChat/>
 
 export default function MDXPage({ children }) {
   return <MdxLayout>{children}</MdxLayout>
 }
+

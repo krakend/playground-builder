@@ -1,14 +1,19 @@
 import MdxLayout from '@/components/MdxLayout';
-
-## About this demo
-- One
-- Two
-- Three
+import URLInputBox from '@/components/URLInputBox'
 
 ## Endpoint
 ```
-/
+/fake-api/*
 ```
+
+## Wildcard routes
+The wildcard functionality lets you declare endpoints with many implicit paths in their backend. Instead of expressing all possible routes one by one, you can create one or more endpoints that will respond to a path pattern instead. The gateway then forwards all routes, starting with the configured path and method, to the backend(s). See the [Wildcard Documentation](https://www.krakend.io/docs/enterprise/endpoints/wildcard/)
+
+In this case, any call to `/fake-api/*` will call our fake backend trying to retrieve its contents.
+
+You can call any file under the project's `data` folder for the test. For instance:
+
+[http://localhost:8080/fake-api/articles.json](http://localhost:8080/fake-api/articles.json)
 
 export default function MDXPage({ children }) {
   return <MdxLayout>{children}</MdxLayout>

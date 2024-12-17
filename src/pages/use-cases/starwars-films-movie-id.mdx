@@ -1,14 +1,20 @@
 import MdxLayout from '@/components/MdxLayout';
-
-## About this demo
-- One
-- Two
-- Three
+import URLInputBox from '@/components/URLInputBox'
 
 ## Endpoint
+```http
+/starwars_films/{movie_id}
 ```
-/
-```
+
+## GraphQL to REST
+This use case demonstrates how to transform a GraphQL query into a regular REST API endpoint without the end-user needing to specify the query.
+
+The query is written in the configuration so consumers do not know about the technology needed to get the data. The qyuery can live in an external file if needed.
+
+See the [GraphQL documentation](https://www.krakend.io/docs/enterprise/backends/graphql/) for more details.
+
+
+<URLInputBox endpoint="http://localhost:8080/starwars_films/" placeholder="movie_id" />
 
 export default function MDXPage({ children }) {
   return <MdxLayout>{children}</MdxLayout>

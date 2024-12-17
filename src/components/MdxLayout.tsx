@@ -91,12 +91,11 @@ export default function MdxLayout({
             <div className="flex flex-col lg:flex-row gap-12">
               {/* Left section */}
               <div className="lg:w-1/2 overflow-auto">
-                <p className="font-semibold mb-2">KrakenD Config</p>
+                <p className="font-semibold mb-2">Endpoint Configuration</p>
                 <pre className="text-sm relative">
                   <button
-                    className={`absolute right-2 top-3 sm:right-6 sm:top-4 icon ${
-                      isCopied ? "text-green-500" : "text-brand-neutral-200"
-                    }`}
+                    className={`absolute right-2 top-3 sm:right-6 sm:top-4 icon ${isCopied ? "text-green-500" : "text-brand-neutral-200"
+                      }`}
                     onClick={handleCopy}
                   >
                     <CopyIcon width={20} height={20} />

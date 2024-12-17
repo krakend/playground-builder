@@ -1,15 +1,23 @@
 import MdxLayout from '@/components/MdxLayout';
 
-## About this demo
-- One
-- Two
-- Three
-
 ## Endpoint
 ```
-/
+/travel
 ```
+
+## gRPC to REST conversion
+
+![gRPC to REST](https://www.krakend.io/images/documentation/grpc.dark.png)
+The `/travel` endpoint connects to two different gRPC services returning flights and trains information. It takes care of data remapping and transformation and it merges the responses from the two services together, returning it as a REST API.
+
+A use case like this simplifies the consumption of internal gRPC services to end-users who don't need to deal with Protobuff.d is unreachable.
+
+Test it: [http://localhost:8080/travel](http://localhost:8080/travel)
+
+See the [gRPC to REST documentation](https://www.krakend.io/docs/enterprise/backends/grpc/)
 
 export default function MDXPage({ children }) {
   return <MdxLayout>{children}</MdxLayout>
 }
+
+

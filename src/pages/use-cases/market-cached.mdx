@@ -1,13 +1,31 @@
 import MdxLayout from '@/components/MdxLayout';
 
-## About this demo
-- One
-- Two
-- Three
-
 ## Endpoint
+```http
+/market/cached
 ```
-/
+
+## Caching responses
+This use case demonstrates how to cache responses from the backend in the gateway. Caching allows you to reduce the number of calls a user sends to the origin, reducing the network traffic and alleviating the pressure on your services.
+
+When you call the `/market/cached` endpoint for the first time, the origin response is stored in memory, and subsequent calls are served from memory instead.
+
+To enable caching, you only need to add the `"qos/http-cache": {}` namespace.
+
+The TTL of the cache is taken from the response headers of the backend.
+
+See the [Response Caching documentation](https://www.krakend.io/docs/enterprise/backends/caching/) for more details.
+
+Check the tracing dashboard to see the loading times with better precision than the `time` command.
+
+First call uncached:
+```
+time curl http://localhost:8080/market/cached
+```
+
+Second call cached:
+```
+time curl http://localhost:8080/market/cached
 ```
 
 export default function MDXPage({ children }) {

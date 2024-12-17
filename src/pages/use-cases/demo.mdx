@@ -1,15 +1,22 @@
 import MdxLayout from '@/components/MdxLayout';
 
-## About this demo
-- One
-- Two
-- Three
 
 ## Endpoint
 ```
-/
+/demo/*
 ```
+
+## Static web server
+The wildcard endpoint `/demo/*` serves static content from the filesystem.
+
+Any content you put under the `/demo` directory of the repository will be accessible using this endpoint.
+
+In addition, if you enable `directory_listing` setting it to `true`, you will be able to browse contents.
+
+See the [Static WebServer documentation](https://www.krakend.io/docs/enterprise/endpoints/serve-static-content/).
+
 
 export default function MDXPage({ children }) {
   return <MdxLayout>{children}</MdxLayout>
 }
+
