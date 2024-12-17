@@ -87,7 +87,11 @@ const Index = ({ useCases }) => {
                   </button>
                 </div>
                 {currentTab === "use-cases" && <UseCases data={useCases} />}
-                {currentTab === "integrations" && <Integration />}
+                {currentTab === "integrations" && (
+                  <Integration
+                    licenseType={process.env.NEXT_PUBLIC_KRAKEND_LICENSE_TYPE}
+                  />
+                )}
               </div>
 
               {/* Line */}

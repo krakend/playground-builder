@@ -2,11 +2,7 @@ import integrationData from "@/data/integrations.json";
 import Image from "next/image";
 import Link from "next/link";
 
-const Integration = () => {
-  const licenseType =
-    process.env?.NEXT_PUBLIC_KRAKEND_LICENSE_TYPE === "enterprise"
-      ? "enterprise"
-      : "open-source";
+const Integration = ({ licenseType = "open-source" }) => {
   return (
     <div
       className="py-5 px-6 flex flex-col rounded-xl"
