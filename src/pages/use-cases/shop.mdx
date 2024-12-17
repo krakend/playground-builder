@@ -1,0 +1,34 @@
+import MdxLayout from '@/components/MdxLayout';
+
+## Endpoint
+```http
+/shop
+```
+
+## Stateless rate limiting
+This use case demonstrates two different types of stateless rate limiting while doing API composition:
+
+- The `qos/ratelimit/proxy` limits the interaction between the gateway and the backend at 1 request per second
+- The  `qos/ratelimit/router` limits the interaction between the user and the gateway at 2 requests per second
+
+As you can see, the configuration has two backends, and one has no limitation `qos/ratelimit/proxy`.
+
+
+Now, if you call this endpoint more than 1-2 times per second, you will start to see the limitations.
+
+### Rate limit exceeded
+If you call the `/shop` endpoint more than 2 times within one second you will get an error status code and no response:
+
+```
+curl -i http://localhost:8080/shop
+```
+
+### Partially rate-limited
+If you call the endpoint quickly enough not to pass the 2 requests per second but surpass 1 request per second, then you will have a partial response containing the backend that is not a rate limit at the proxy level. So the response contains `campaigns` but it does not have `products`.
+
+To see all types of rate limiting, see the [Throttling documentation](https://www.krakend.io/docs/enterprise/throttling/)
+
+
+export default function MDXPage({ children }) {
+  return <MdxLayout>{children}</MdxLayout>
+}

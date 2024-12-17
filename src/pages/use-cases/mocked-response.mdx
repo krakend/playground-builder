@@ -1,14 +1,19 @@
 import MdxLayout from '@/components/MdxLayout';
 
-## About this demo
-- One
-- Two
-- Three
-
 ## Endpoint
 ```
-/
+/mocked-response
 ```
+
+## Setting mock data in the configuration
+
+The `/mocked-response` endpoint does not retrieve data from any backend. Instead, it declares the data the endpoint will use in its response using the Static Proxy decorator.
+
+You can choose whether you want this data displayed when a backend fails or always, as we do in this example where the backend is unreachable.
+
+Test it: [http://localhost:8080/mocked-response](http://localhost:8080/mocked-response)
+
+See the [Static Procy documentation](https://www.krakend.io/docs/enterprise/endpoints/static-proxy/)
 
 export default function MDXPage({ children }) {
   return <MdxLayout>{children}</MdxLayout>
