@@ -3,6 +3,18 @@ import Image from "next/image";
 import Link from "next/link";
 
 const Integration = ({ licenseType = "open-source" }) => {
+  let integrations = integrationData.integrations;
+
+  if (licenseType === "open-source") {
+    integrations = integrations.filter(
+      (integration) => integration?.license?.indexOf("open-source") !== -1
+    );
+  } else if (licenseType === "enterprise") {
+    integrations = integrations.filter(
+      (integration) => integration?.license?.indexOf("enterprise") !== -1
+    );
+  }
+
   return (
     <div
       className="py-5 px-6 flex flex-col rounded-xl"
@@ -11,7 +23,7 @@ const Integration = ({ licenseType = "open-source" }) => {
       <p className="text-white mb-4 font-medium">
         Explore demos for these integrations:
       </p>
-      {integrationData.integrations.map((singleIntegrationData, index) => {
+      {integrations.map((singleIntegrationData, index) => {
         return (
           <Link
             key={index}
