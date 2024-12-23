@@ -48,11 +48,11 @@ const URLInputBox: React.FC<URLInputBoxProps> = ({
   return (
     <div className="not-prose">
       <div
-        className="bg-white py-2 px-4 rounded-md flex flex-col sm:flex-row sm:items-center sm:justify-between"
+        className="bg-white py-4 px-4 rounded-md flex flex-col sm:flex-row sm:items-center sm:justify-between relative"
         onClick={handleDivClick}
       >
-        <div className="flex text-brand-neutral-600 w-9/12">
-          <p>{endpoint || ""}</p>
+        <div className="flex text-brand-neutral-600 w-full">
+          <p className="shrink-0">{endpoint || ""}</p>
           <input
             ref={inputRef}
             type="text"
@@ -62,7 +62,7 @@ const URLInputBox: React.FC<URLInputBoxProps> = ({
         </div>
 
         <button
-          className={`bg-brand-neutral-900 text-white rounded-md px-6 py-2 mt-4 sm:mt-0 ${
+          className={`bg-brand-neutral-900 text-white rounded-md px-6 py-2 absolute top-2 right-2 ${
             isCopied ? "bg-blue-500" : ""
           }`}
           onClick={handleCopyUrl}
