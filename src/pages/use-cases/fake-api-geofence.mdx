@@ -8,7 +8,7 @@ import MdxLayout from '@/components/MdxLayout';
 **IMPORTANT NOTE**: to use geofencing, you should download a [Maxmind GeoIP City database](https://dev.maxmind.com/geoip/geolite2-free-geolocation-data?lang=en) (commercial or free) and store it on `config/krakend/geoip/` before starting KrakenD.
 
 ## Wildcard routes with Geofencing
-This is the same [`fake-api` wildcard functionality](/use-cases/fake-api) that calls our open fake backend, but before trying to retrieve its contents, it will check the user's country first.
+This is the same [`fake-api` wildcard functionality](/demo/use-cases/fake-api) that calls our open fake backend, but before trying to retrieve its contents, it will check the user's country first.
 
 The Geofencing functionality is enabled at the service level and does not require a specific endpoint configuration. It enriches the request with Geodata to be used in the endpoint or passed to the backend. In the endpoint, we have only forwarded one header:
 

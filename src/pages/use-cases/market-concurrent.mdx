@@ -1,21 +1,21 @@
 import MdxLayout from '@/components/MdxLayout';
-
+import URLInputBox from '@/components/URLInputBox'
 
 ## Endpoint
 ```
 /market/concurrent
 ```
 
-This endpoint calls the same external API from CoinGecko that returns the cryptocurrency information you used in the [non-current option](/use-cases/market-concurrent).
+This endpoint calls the same external API from CoinGecko that returns the cryptocurrency information you used in the [non-current option](/demo/use-cases/market-concurrent).
 
 The difference is its **lower load time and error rate**. You will need to open the tracing integration to compare timings.
 
 ## Concurrent calls
 Notice that the endpoint has a `concurrent_calls` set to `3`. When you call the endpoint, KrakenD fires **three simultaneous connections** to the CoinGecko API and returns the **first fastest successful response**, canceling immediately the remaining calls to complete. See the [Concurrent Calls Documentation](https://www.krakend.io/docs/endpoints/concurrent-requests/)
 
-Call it at least once to compare in the tracing dashboard the difference in load times vs the [non-concurrent option](/use-cases/market-simple)
+Call it at least once to compare in the tracing dashboard the difference in load times vs the [non-concurrent option](/demo/use-cases/market-simple)
 
-[http://localhost:8080/market/simple](http://localhost:8080/market/concurrent)
+<URLInputBox endpoint="http://localhost:8080/market/concurrent" placeholder="" />
 
 export default function MDXPage({ children }) {
   return <MdxLayout>{children}</MdxLayout>

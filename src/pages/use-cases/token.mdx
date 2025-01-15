@@ -7,7 +7,7 @@ import MdxLayout from '@/components/MdxLayout';
 
 This use case simulates when you have a monolithic service or similar, that is capable of generating a JSON payload (like a token) but is not able to cryptographically sign it. The signing component helps you to transition from a classic session workflow to a JWT workflow.
 
-In this example we have a simulated token payload from a backend, that the `auth/signer` component is going to take and sign cryptographically using an algorithm HS256. The resulting token can be used to access protected endpoints that require the same key, like the [`/private/custom/` endpoint](/use-cases/private-custom)
+In this example we have a simulated token payload from a backend, that the `auth/signer` component is going to take and sign cryptographically using an algorithm HS256. The resulting token can be used to access protected endpoints that require the same key, like the [`/private/custom/` endpoint](/demo/use-cases/private-custom)
 
 Request a token here:
 [http://localhost:8080/token](http://localhost:8080/token)
