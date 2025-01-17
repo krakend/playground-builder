@@ -6,6 +6,7 @@ const config: Config = {
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
+  safelist: ["right-2", "top-2"],
   theme: {
     fontSize: {
       xxs: ["0.625rem", { lineHeight: "0.75rem" }], // 10px
@@ -176,7 +177,6 @@ const config: Config = {
       },
     },
   },
-  plugins: [require('@tailwindcss/typography'),
-  ],
+  plugins: [require("@tailwindcss/typography")],
 };
 export default config;
