@@ -3,12 +3,12 @@ import Header from "@/components/Header";
 import integrationData from "@/data/integrations.json";
 import { ArrowLeftIcon } from "@heroicons/react/20/solid";
 import Image from "next/image";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 import SEO from "./SEO";
 
 const IntegrationLayout = ({ children }) => {
   const router = useRouter();
-  const pathname = usePathname();
+  let pathname = router.asPath.replace(/\/$/, "");
 
   // Extract the slug from the pathname
   const slug = pathname.split("/").pop();

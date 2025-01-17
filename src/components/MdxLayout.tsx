@@ -1,7 +1,7 @@
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import SEO from "@/components/SEO";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 
 import CopyIcon from "@/image/icons/copy.svg";
@@ -17,8 +17,9 @@ export default function MdxLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const pathname = usePathname();
   const router = useRouter();
+  let pathname = router.asPath.replace(/\/$/, "");
+
   const useCaseSlug = pathname.replace("/use-cases/", "");
   const [isCopied, setIsCopied] = useState(false);
   const useCases = data.endpoints;
