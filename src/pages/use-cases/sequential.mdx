@@ -1,0 +1,31 @@
+import MdxLayout from '@/components/MdxLayout';
+
+
+## Endpoint
+```http
+/sequential
+```
+
+## Chaining calls using the sequential proxy
+Sometimes, you need to call a backend call with data from a previous call. This use case illustrates how an endpoint fetches data from a Hotel's endpoint, retrieves a `destination_id`, and passes it to the Destinations API to have the enriched query.
+
+The sequential proxy only requires you to add the following configuration:
+
+```
+"proxy": {
+  "sequential": true
+}
+```
+
+Then, all backends are executed one after the other (instead of in parallel).
+
+You can see the merged data from the Hotels and the resolved dependency under Destinations endpoints here:
+
+[http://localhost:8080/sequential](http://localhost:8080/sequential)
+
+See the [Sequential Proxy documentation](https://www.krakend.io/docs/enterprise/endpoints/sequential-proxy/) for more details.
+
+
+export default function MDXPage({ children }) {
+  return <MdxLayout>{children}</MdxLayout>
+}

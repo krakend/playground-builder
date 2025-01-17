@@ -1,7 +1,7 @@
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import SEO from "@/components/SEO";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 
 import CopyIcon from "@/image/icons/copy.svg";
@@ -17,21 +17,27 @@ export default function MdxLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const pathname = usePathname();
   const router = useRouter();
+  let pathname = router.asPath.replace(/\/$/, "");
+
   const useCaseSlug = pathname.replace("/use-cases/", "");
   const [isCopied, setIsCopied] = useState(false);
   const useCases = data.endpoints;
 
   const currentUseCase = useCases.find((useCase) => {
     let [tag, name] = useCase["@comment"].split(":");
+    let endpoint = useCase.endpoint;
     name = name.trim();
     tag = tag.trim();
-    let slug = name
+    let slug = endpoint
       .toLowerCase()
       .replace(/ /g, "-")
-      .replace(/[^a-zA-Z0-9-]/g, "")
-      .replace(/--+/g, "-");
+      .replace(/_/g, "-")
+      .replace(/[^a-z0-9/-]/g, "")
+      .replace(/(?!^)\//g, "-")
+      .replace(/--+/g, "-")
+      .replace(/-$/g, "")
+      .replace("/", "");
 
     return slug === useCaseSlug;
   });
@@ -86,7 +92,7 @@ export default function MdxLayout({
             <div className="flex flex-col lg:flex-row gap-12">
               {/* Left section */}
               <div className="lg:w-1/2 overflow-auto">
-                <p className="font-semibold mb-2">KrakenD Config</p>
+                <p className="font-semibold mb-2">Endpoint Configuration</p>
                 <pre className="text-sm relative">
                   <button
                     className={`absolute right-2 top-3 sm:right-6 sm:top-4 icon ${

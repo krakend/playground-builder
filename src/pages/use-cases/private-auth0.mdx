@@ -1,0 +1,20 @@
+import MdxLayout from '@/components/MdxLayout';
+
+
+## Endpoint
+```
+/private/auth0
+```
+
+## Endpoint with JWT Authorization
+This endpoint requires the request to provide a valid JWT token to access the contents.
+
+The token signature is then checked against the public key specified in the `jwk_url` field. It also checks that the token contains one of the roles `user` or `admin` and belongs to the right `audience`.
+
+Replace the `jwk_url` with your Auth0 instance and users to test this endpoint.
+
+See the [Auth0 integration in KrakenD](https://www.krakend.io/docs/enterprise/authorization/auth0/) and the [JWT Validation](https://www.krakend.io/docs/enterprise/authorization/jwt-validation/) for other providers
+
+export default function MDXPage({ children }) {
+  return <MdxLayout>{children}</MdxLayout>
+}

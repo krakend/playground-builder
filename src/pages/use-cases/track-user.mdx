@@ -1,0 +1,30 @@
+import MdxLayout from '@/components/MdxLayout';
+
+
+## Endpoint
+```http
+/track-user
+```
+
+## Security Policies
+The `/track-user` endpoint completes only if the user is passing a request with a Cookie setting `GDPR=yes`. If the cookie is missing or with a different value, then it replies with a `403` status code.
+
+The policies engine lets you write custom rules validated on runtime during requests, responses, and token validation. The policies allow you to implement all sorts of validations and user access control, from parameter compliance, to RBAC (Role-Based Access Control) and ABAC (Attribute-Based Access Control) strategies.
+
+For example, access the endpoint with:
+```
+curl -iG -H'Cookie: GDPR=yes' 'http://localhost:8080/track-user'
+```
+
+Or get a rejection with:
+
+```
+curl -iG 'http://localhost:8080/track-user'
+```
+
+See the [Security Policies documentation](https://www.krakend.io/docs/enterprise/security-policies/)
+
+
+export default function MDXPage({ children }) {
+  return <MdxLayout>{children}</MdxLayout>
+}

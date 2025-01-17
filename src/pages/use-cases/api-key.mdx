@@ -1,0 +1,40 @@
+import MdxLayout from '@/components/MdxLayout';
+
+
+## Endpoint
+```
+/api-key
+```
+
+## Endpoint with API Key access
+This endpoint requires the request to provide a valid API Key to access the contents.
+
+The configuration block responsible for this check is:
+```
+"auth/api-keys": {
+  "roles": [
+    "admin"
+  ]
+}
+```
+
+It will require that the API Key belongs to an `admin`. The API keys are declared statically outside the endpoint at the service level. See the [API Keys documentation](https://www.krakend.io/docs/enterprise/authentication/api-keys/)
+
+You can test this endpoint with:
+
+```
+curl -iG -H 'Authorization: Bearer 58427514-be32-0b52-b7c6-d01fada30497' 'http://localhost:8080/api-key'
+```
+
+If you don't pass a valid key, you will get an error:
+
+```
+curl -iG -H 'Authorization: Bearer invalid' 'http://localhost:8080/api-key'
+```
+
+
+
+
+export default function MDXPage({ children }) {
+  return <MdxLayout>{children}</MdxLayout>
+}

@@ -1,0 +1,19 @@
+import MdxLayout from '@/components/MdxLayout';
+
+## Endpoint
+```
+/private/custom
+```
+
+## JWT auth using a token signed by KrakenD
+This use case protects an endpoint that requires a token that has been signed by KrakenD at the [`/token` endpoint](/demo/use-cases/token)
+
+After getting the `/token` replace the `$TOKEN` below and test:
+
+```
+ curl -H"Authorization: Bearer $TOKEN" http://localhost:8080/private/custom
+```
+
+export default function MDXPage({ children }) {
+  return <MdxLayout>{children}</MdxLayout>
+}

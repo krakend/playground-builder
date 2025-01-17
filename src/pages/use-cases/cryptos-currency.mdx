@@ -1,0 +1,57 @@
+import MdxLayout from '@/components/MdxLayout';
+import URLInputBox from '@/components/URLInputBox'
+
+## Endpoint
+```http
+/cryptos/{currency}
+```
+
+## Advanced manipulation with JMESPath
+This use case demonstrates a complex manipulation of data using an expression. It queries a CoinGecko API endpoint ([see the raw data](https://api.coingecko.com/api/v3/coins/markets?vs_currency=EUR&order=market_cap_desc&per_page=100&page=1&sparkline=false)) that returns data for over 100 cryptocurrencies. Each cryptocurrency returns an object like this:
+
+```
+{
+  "id": "bitcoin",
+  "symbol": "btc",
+  "name": "Bitcoin",
+  "image": "https://coin-images.coingecko.com/coins/images/1/large/bitcoin.png?1696501400",
+  "current_price": 102266,
+  "market_cap": 2024218735768,
+  "price_change_percentage_24h": 2.72102,
+  ...19 fields more
+}
+```
+
+Our frontend will use just 5 fields and a shortened list with a slice of 5 currencies instead of the 100 currencies and over 25+ fields each.
+
+To accomplish this modification, the `/cryptos/{currency}` use case applies a JMESPath expression that transforms the data. It looks like this (break lines for simplified reading, must be a one-liner):
+
+```
+reverse(
+    sort_by(
+      collection[:5], &name
+    )
+)[*].{
+    name: name,
+    token: symbol,
+    price: current_price,
+    price_change: price_change_percentage_24h,
+    market_cap: market_cap
+}
+```
+
+The final part of the expression `[*].{}` takes all elements from the response array and projects a new object, renaming fields and taking only the desired ones  `name`, `token`, `price`, `price_change`, and `market_cap`.
+
+Then, it sorts the resulting collection by `&name` (it could be the `market_cap` or anything else) with the expression `sort_by()` and then flips the order entirely with `reverse()`.
+
+## Documentation
+- [JMESPath documentation](https://www.krakend.io/docs/enterprise/endpoints/jmespath/)
+- [Interactive JMESPath playground](https://play.jmespath.org/)
+
+Write the EUR or USD currency, and open the link in the browser or cURL:
+<URLInputBox endpoint="http://localhost:8080/cryptos/" placeholder="currency" />
+
+
+export default function MDXPage({ children }) {
+  return <MdxLayout>{children}</MdxLayout>
+}
