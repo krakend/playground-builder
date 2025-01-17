@@ -1,4 +1,5 @@
 import MdxLayout from '@/components/MdxLayout';
+import URLInputBox from '@/components/URLInputBox'
 
 ## Endpoint
 ```
@@ -11,9 +12,9 @@ The `/mocked-response` endpoint does not retrieve data from any backend. Instead
 
 You can choose whether you want this data displayed when a backend fails or always, as we do in this example where the backend is unreachable.
 
-Test it: [http://localhost:8080/mocked-response](http://localhost:8080/mocked-response)
-
 See the [Static Procy documentation](https://www.krakend.io/docs/enterprise/endpoints/static-proxy/)
+
+<URLInputBox endpoint="http://localhost:8080/mocked-response" isStatic="true" />
 
 export default function MDXPage({ children }) {
   return <MdxLayout>{children}</MdxLayout>

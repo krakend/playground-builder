@@ -11,9 +11,11 @@ The wildcard functionality lets you declare endpoints with many implicit paths i
 
 In this case, any call to `/fake-api/*` will call our fake backend trying to retrieve its contents.
 
-You can call any file under the project's `data` folder for the test. For instance:
+You can call any file under the project's `data` folder for the test. For instance, add `articles.json` to the route below:
 
-[http://localhost:8080/fake-api/articles.json](http://localhost:8080/fake-api/articles.json)
+<URLInputBox endpoint="http://localhost:8080/fake-api/" placeholder="path" />
+
+
 
 export default function MDXPage({ children }) {
   return <MdxLayout>{children}</MdxLayout>

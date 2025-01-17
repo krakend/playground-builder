@@ -1,4 +1,5 @@
 import MdxLayout from '@/components/MdxLayout';
+import URLInputBox from '@/components/URLInputBox'
 
 ## Endpoint
 ```
@@ -6,14 +7,14 @@ import MdxLayout from '@/components/MdxLayout';
 ```
 
 ## Chat room using WebSockets
-The endpoint `/chat` is an example endpoint where your web interface would connect to offer a WebSockets integration.
+The endpoint `/chat` is an example endpoint where your web interface would connect to offer a WebSockets integration. It is a simple HTML page with Javascript using WebSockets that interact with KrakenD
 
 See the [WebSockets documentation](https://www.krakend.io/docs/enterprise/websockets/).
 
-Open the interface: [http://localhost:8080/chat](http://localhost:8080/chat)
+Chat interface (HTML and JS only):
 
+<URLInputBox endpoint="http://localhost:8080/chat/" isStatic="true" />
 
 export default function MDXPage({ children }) {
   return <MdxLayout>{children}</MdxLayout>
 }
-
