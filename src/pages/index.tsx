@@ -1,15 +1,15 @@
 import { Integration, UseCases } from "@/components/Home";
 import Layout from "@/components/Layout";
 import SEO from "@/components/SEO";
+import { useGeneralContext } from "@/context/GeneralContext";
 import data from "@/data/krakend.json";
 import Architecture from "@/image/architecture.svg";
 import BGPurplePattern from "@/image/background/bg-pattern-purple.webp";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
 
 const Index = ({ useCases }) => {
-  const [currentTab, setCurrentTab] = useState("use-cases");
+  const { currentTab, updateCurrentTabHandler } = useGeneralContext();
 
   return (
     <Layout>
@@ -71,7 +71,7 @@ const Index = ({ useCases }) => {
                         ? "bg-white text-brand-neutral-900"
                         : "bg-brand-neutral-600 text-brand-neutral-300"
                     }`}
-                    onClick={() => setCurrentTab("use-cases")}
+                    onClick={() => updateCurrentTabHandler("use-cases")}
                   >
                     Use-cases
                   </button>
@@ -81,7 +81,7 @@ const Index = ({ useCases }) => {
                         ? "bg-white text-brand-neutral-900"
                         : "bg-brand-neutral-600 text-brand-neutral-300"
                     }`}
-                    onClick={() => setCurrentTab("integrations")}
+                    onClick={() => updateCurrentTabHandler("integrations")}
                   >
                     Integrations
                   </button>
