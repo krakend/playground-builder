@@ -1,7 +1,7 @@
 
 # Krakend Playground Demo Builder
 
-This repository contains the codebase for generating the Krakend Playground demo website using Next.js.
+This repository contains the codebase for generating the Krakend Playground demo website using Next.js. The generated content is to be run under the relative path `/demo`.
 
 ## Getting Started
 
@@ -44,9 +44,17 @@ Open [http://localhost:3000](http://localhost:3000) in your browser to view the 
 To build the project, you can use the following command:
 
 ```bash
-npm run build
+make build_ee
 ```
 This will generate an `out` directory with the static HTML, CSS, and JavaScript files.
+
+You can test the build with any static web server. For instance:
+
+```
+docker run -it -v "$PWD/out:/usr/share/nginx/html/demo" -p "8080:80" nginx
+```
+
+And then navigate to `http://localhost:8080/demo/`
 
 ### Adding or Updating Use-Case Demo Pages
 
