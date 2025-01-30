@@ -39,6 +39,18 @@ pre[class*="language-"] {
   background: #1d1f21;
 }
 
+pre {
+  background: #1d1f21 !important;
+  padding: 2em !important;
+  margin: 0 !important;
+  overflow: auto;
+  border-radius: 0.3em;
+}
+
+pre code {
+  padding: 0 !important;
+}
+
 /* Inline code */
 :not(pre) > code[class*="language-"] {
   padding: 0.1em;

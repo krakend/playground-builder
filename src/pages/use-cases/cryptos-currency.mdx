@@ -1,5 +1,5 @@
 import MdxLayout from '@/components/MdxLayout';
-import URLInputBox from '@/components/URLInputBox'
+import URLInputBox from '@/components/URLInputBox';
 
 ## Endpoint
 ```http
@@ -9,7 +9,7 @@ import URLInputBox from '@/components/URLInputBox'
 ## Advanced manipulation with JMESPath
 This use case demonstrates a complex manipulation of data using an expression. It queries a CoinGecko API endpoint ([see the raw data](https://api.coingecko.com/api/v3/coins/markets?vs_currency=EUR&order=market_cap_desc&per_page=100&page=1&sparkline=false)) that returns data for over 100 cryptocurrencies. Each cryptocurrency returns an object like this:
 
-```
+```json
 {
   "id": "bitcoin",
   "symbol": "btc",
@@ -26,7 +26,7 @@ Our frontend will use just 5 fields and a shortened list with a slice of 5 curre
 
 To accomplish this modification, the `/cryptos/{currency}` use case applies a JMESPath expression that transforms the data. It looks like this (break lines for simplified reading, must be a one-liner):
 
-```
+```jmespath
 reverse(
     sort_by(
       collection[:5], &name
