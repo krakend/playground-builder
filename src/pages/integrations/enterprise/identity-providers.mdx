@@ -1,7 +1,25 @@
 import IntegrationLayout from '@/components/IntegrationLayout';
 
 ## About this demo
-Keycloak and many other identity providers can be integrated with KrakenD.
+Many identity providers work with KrakenD as it uses standard JWT validation. In this demo, we have included a ready-to-go example with Keycloak.
+
+The Keycloak container acts as an Identity Provider (IdP) to demonstrate the ability to properly validate JWT tokens issued by it.
+
+We've created a [SPA demo page](http://localhost:3000) where you can see and try the authentication flow.  There are two pre-generated users with different roles (`user` / `pass`):
+
+- `moderator` / `moderator`
+- `reader` / `reader`
+
+If you need to create new roles, users or configurations in the Keycloak instance, feel free to do so by browsing to the `krakend` realm administration panel:
+
+[http://localhost:8085](http://localhost:8085) (credentials: `admin`/ `admin`)
+
+⚠️ All the realm configuration changes done using the administration dashboard won't be persisted on container restart. If you need to export the realm config for later usage, you can overwrite the realms/ contents by spawning the following command (make sure the container is up and running):
+
+```
+make save-keycloak-config
+```
+
 
 export default function MDXPage({ children }) {
   return <IntegrationLayout>{children}</IntegrationLayout>
