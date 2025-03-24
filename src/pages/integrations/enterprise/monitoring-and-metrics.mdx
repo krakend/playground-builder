@@ -2,12 +2,15 @@ import IntegrationLayout from '@/components/IntegrationLayout';
 
 ## About this demo
 Grafana Monitoring shows the usage of KrakenD and reveals low-level metrics.
-Use `admin` as temporary user and password. And then go to `Dashboards` > `Manage` to see the KrakenD dashboard.
 
-## Endpoint
-```
-http://localhost:4000
-```
+Access the demo: [http://localhost:4000](http://localhost:4000)
+
+Use `krakend` as temporary user and password. And then go to `Dashboards` > `Manage` to see the KrakenD dashboard.
+
+![Grafana screenshot](https://www.krakend.io/images/documentation/screenshots/grafana-prometheus-otel.png)
+
+## Documentation
+- [Telemetry and Monitoring with Grafana](https://www.krakend.io/docs/enterprise/telemetry/grafana/)
 
 export default function MDXPage({ children }) {
   return <IntegrationLayout>{children}</IntegrationLayout>

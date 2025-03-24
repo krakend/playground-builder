@@ -1,12 +1,12 @@
+import DemoCta from "@/components/Cta/DemoCta";
 import { Integration, UseCases } from "@/components/Home";
 import Layout from "@/components/Layout";
 import SEO from "@/components/SEO";
 import { useGeneralContext } from "@/context/GeneralContext";
 import data from "@/data/krakend.json";
-import Architecture from "@/image/architecture.svg";
-import BGPurplePattern from "@/image/background/bg-pattern-purple.webp";
+import BGPurplePattern from "@/image/background/bg-pattern.png";
+import HeroDiagram from "@/image/diagram/hero-playground-diagram-new.png";
 import Image from "next/image";
-import Link from "next/link";
 
 const Index = ({ useCases }) => {
   const { currentTab, updateCurrentTabHandler } = useGeneralContext();
@@ -16,72 +16,73 @@ const Index = ({ useCases }) => {
       <SEO />
 
       {/* Hero */}
-      <section className="bg-brand-neutral-900 section--sm relative">
+      <section className="section--sm relative">
+        <Image
+          src={BGPurplePattern}
+          width={900}
+          height={810}
+          alt=""
+          className="absolute -top-1/4 left-1/2 -translate-x-1/2 z-0 pointer-events-none"
+        />
         <div className="container--boxed">
-          <Image
-            src={BGPurplePattern}
-            width={580}
-            height={321}
-            alt=""
-            className="absolute top-8 left-1/2 -translate-x-1/2 z-0"
-          />
           <div className="relative z-10">
-            {process.env.NEXT_PUBLIC_KRAKEND_LICENSE_TYPE === "open-source" && (
-              <span className="text-white tracking-wider uppercase text-center block mx-auto mb-2">
-                Open Source
-              </span>
-            )}
-            {process.env.NEXT_PUBLIC_KRAKEND_LICENSE_TYPE === "open-source" ? (
-              <h1 className="heading--h1 items-center text-center mb-4 md:mb-7 justify-center">
-                <span className="text-white">KrakenD </span>{" "}
-                <span className="text-gradient--lavender leading-normal">
-                  Playground
-                </span>
-              </h1>
-            ) : (
-              <h1 className="heading--h1 flex flex-col items-center text-center mb-4 md:mb-7">
-                <span className="text-white">KrakenD Enterprise</span>
-                <span className="text-gradient--lavender leading-normal">
-                  Playground
-                </span>
-              </h1>
-            )}
+            <div className="max-w-2xl mx-auto text-center">
+              <h2 className="heading--h3 text-white">
+                KrakenD{" "}
+                {process.env.NEXT_PUBLIC_KRAKEND_LICENSE_TYPE === "open-source"
+                  ? "Open Source"
+                  : "Enterprise"}
+              </h2>
+              <h2
+                className="heading--h1 text-gradient--lavender py-1"
+                style={{ letterSpacing: "-1px" }}
+              >
+                Playground
+              </h2>
 
-            <p
-              className="text-brand-neutral-300 text--lg text-center mx-auto"
-              style={{ maxWidth: "722px" }}
-            >
-              This is a demonstration environment that puts together the
-              necessary pieces to get you started with our API Gateway, using
-              example use-cases.
-            </p>
+              <p className="text-brand-neutral-300 mt-8 text--lg text-center">
+                This is a demonstration environment that puts together the
+                necessary pieces to get you started with our API Gateway, using
+                example use-cases.
+              </p>
+            </div>
+            <div className="mt-6 flex justify-center">
+              <Image
+                src={HeroDiagram}
+                alt="Hero playground diagram"
+                width={1024}
+                height={646}
+              />
+            </div>
           </div>
         </div>
       </section>
 
-      <main className="section--xl bg-brand-neutral-900 relative">
+      <main className="section--sm">
         <div className="container--boxed">
-          <div className="grid grid-cols-12 w-full gap-8">
-            <div className="col-span-12 md:col-span-5 lg:col-span-4 flex">
-              <div className="max-w-full">
-                <div className="flex items-center gap-1.5 mb-2.5">
+          <div>
+            <div>
+              <div className="max-w-screen-md mx-auto">
+                <div className="flex items-center justify-center gap-1.5 mb-10">
                   <button
-                    className={`px-4 py-2 font-medium rounded-md rounded-l-full ${
+                    className={`px-10 py-2 font-medium ${
                       currentTab === "use-cases"
-                        ? "bg-white text-brand-neutral-900"
+                        ? "bg-white text-brand-neutral-800"
                         : "bg-brand-neutral-600 text-brand-neutral-300"
                     }`}
                     onClick={() => updateCurrentTabHandler("use-cases")}
+                    style={{ borderRadius: "100px 20px 20px 100px" }}
                   >
                     Use-cases
                   </button>
                   <button
-                    className={`px-4 py-2 font-medium rounded-r-full rounded-l-md ${
+                    className={`px-10 py-2 font-medium ${
                       currentTab === "integrations"
-                        ? "bg-white text-brand-neutral-900"
+                        ? "bg-white text-brand-neutral-800"
                         : "bg-brand-neutral-600 text-brand-neutral-300"
                     }`}
                     onClick={() => updateCurrentTabHandler("integrations")}
+                    style={{ borderRadius: "20px 100px 100px 20px" }}
                   >
                     Integrations
                   </button>
@@ -105,38 +106,33 @@ const Index = ({ useCases }) => {
                 }}
               /> */}
             </div>
-
-            {/* Diagram */}
-            <div className="col-span-12 md:col-span-7 lg:col-span-8 ">
-              <div className="sticky top-0 h-screen flex items-center justify-center">
-                <Architecture />
-              </div>
-            </div>
           </div>
         </div>
       </main>
 
-      {/* Questions */}
-      <section className="section--xl pt-0 bg-brand-neutral-900">
-        <div className="container--boxed flex items-center flex-col ">
-          <h2 className="text-center heading--h2 text-white mb-6 md:mb-8">
-            Questions?
-          </h2>
-          <Link
-            href={"https://www.krakend.io/support/"}
-            className="button--primary"
-          >
-            Ask Support
-          </Link>
-        </div>
-      </section>
+      <DemoCta />
     </Layout>
   );
 };
 
 export default Index;
 
-export const getStaticProps = async () => {
+/**
+ * Generates static props for the Index page at build time.
+ * Processes endpoint data to create organized use cases with custom fields and categories.
+ *
+ * @returns {Object} Props containing grouped use cases
+ *   - useCases: Object with categories as keys and arrays of processed endpoints as values
+ *     - Each use case contains:
+ *       - Original endpoint data
+ *       - custom_fields: {
+ *           tag: First part of "@comment"
+ *           name: Second part of "@comment"
+ *           slug: URL-friendly version of endpoint
+ *           category: From OpenAPI tags or 'others'
+ *         }
+ */
+export function getStaticProps() {
   const endpoints = data.endpoints;
 
   // In each endpoint, split the @comment by `:` and set the first part as tag, and the second part as name. Set the tag and name in "custom_fields" object
@@ -145,7 +141,7 @@ export const getStaticProps = async () => {
     name = name.trim();
     tag = tag.trim();
 
-    let slug = endpoint.endpoint
+    const slug = endpoint.endpoint
       .toLowerCase()
       .replace(/ /g, "-")
       .replace(/_/g, "-")
@@ -154,9 +150,8 @@ export const getStaticProps = async () => {
       .replace(/--+/g, "-")
       .replace(/-$/g, "")
       .replace("/", "");
-    let category =
-      endpoint?.extra_config?.["documentation/openapi"]?.tags?.[0] || "Others";
-    category = category.toLowerCase().replace(/ /g, "_");
+    const category =
+      endpoint?.extra_config?.["documentation/openapi"]?.tags?.[0] || "others";
 
     return {
       ...endpoint,
@@ -185,4 +180,4 @@ export const getStaticProps = async () => {
       useCases: groupedUseCases,
     },
   };
-};
+}

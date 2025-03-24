@@ -3,10 +3,16 @@ import IntegrationLayout from '@/components/IntegrationLayout';
 ## About this demo
 Kibana stores KrakenD logs and allows analysis.
 
-## Endpoint
-```
-http://localhost:5601/app/home#/
-```
+Access the demo: [http://localhost:5601/](http://localhost:5601/)
+
+**NOTE**: To import a Kibana dashboard with some valuable metrics, run in the console `make elastic` first.
+
+Then you can click on the burger menu and go to Analytics > Dashboards
+
+![Screenshot ELK](https://www.krakend.io/images/documentation/screenshots/kibana-krakend-dashboard.png)
+
+## Documentation
+- [ELK Integration for Logging](https://www.krakend.io/docs/logging/elk-integration/)
 
 export default function MDXPage({ children }) {
   return <IntegrationLayout>{children}</IntegrationLayout>

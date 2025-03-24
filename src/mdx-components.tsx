@@ -1,10 +1,21 @@
 import CopyIcon from "@/image/icons/copy.svg";
 import type { MDXComponents } from "mdx/types";
-import React, { useState } from "react";
+import { useState } from "react";
 
-const Pre = ({ children, ...props }: React.HTMLAttributes<HTMLElement>) => {
+/**
+ * A wrapper component for rendering preformatted code blocks with a copy button to copy the code content to the clipboard.
+ *
+ * @param children The code block content to be displayed inside `<pre>`.
+ * @param props Additional properties passed to the `<pre>` element.
+ * @returns A styled `<pre>` element with a copy button.
+ */
+const Pre = ({ children, ...props }) => {
   const [copied, setCopied] = useState(false);
 
+  /**
+   * Copies the text content of a child component to the clipboard.
+   * Sets a temporary copied state for user feedback.
+   */
   const copyCodeHandler = () => {
     navigator.clipboard
       .writeText(children.props.children)
@@ -30,6 +41,13 @@ const Pre = ({ children, ...props }: React.HTMLAttributes<HTMLElement>) => {
   );
 };
 
+/**
+ * Customizes the default MDX components by providing a custom component.
+ * This function allows for extending or overriding MDX components dynamically.
+ *
+ * @param components The existing MDX components to extend.
+ * @returns A new object with the custom `<pre>` component and any provided components.
+ */
 export function useMDXComponents(components: MDXComponents): MDXComponents {
   return {
     pre: Pre,

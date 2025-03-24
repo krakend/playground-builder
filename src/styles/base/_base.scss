@@ -5,3 +5,7 @@ html {
 body {
   // @apply antialiased;
 }
+
+pre code {
+  @apply overflow-x-auto w-full inline-block pb-2;
+}

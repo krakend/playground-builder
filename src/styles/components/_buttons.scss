@@ -1,6 +1,6 @@
 @layer components {
   .button--primary {
-    @apply rounded-lg px-4 py-2 inline-block bg-white text-black font-semibold text-center duration-300 transition-all;
+    @apply rounded-lg px-4 py-2 inline-block bg-white hover:bg-gray-200 text-brand-neutral-800 font-semibold text-center duration-300 transition-all;
     box-shadow:
       0 8px 12px 0 rgba(16, 42, 67, 0.05),
       0 4px 6px 0 rgba(16, 42, 67, 0.05),
