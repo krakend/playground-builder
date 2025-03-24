@@ -1,0 +1,20 @@
+import MdxLayout from '@/components/MdxLayout';
+
+
+## Endpoint
+```
+/private/moderate
+```
+
+## Endpoint with JWT Authorization
+This endpoint requires the request to provide a valid JWT token to access the contents.
+
+The token signature is then checked against the public key specified in the `jwk_url` field. It also checks that the token contains the role `moderator` and belongs to the right `audience`.
+
+Replace the `jwk_url` with your Keycloak instance and users to test this endpoint.
+
+See the [JWT Validation](https://www.krakend.io/docs/enterprise/authorization/jwt-validation/) documentation for more info and other providers
+
+export default function MDXPage({ children }) {
+  return <MdxLayout>{children}</MdxLayout>
+}
