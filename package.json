@@ -16,7 +16,7 @@
     "@svgr/webpack": "^8.1.0",
     "@types/mdx": "^2.0.13",
     "html-react-parser": "^5.2.2",
-    "next": "^15.1.7",
+    "next": "^15.2.3",
     "next-mdx-remote": "^5.0.0",
     "prismjs": "^1.29.0",
     "react": "^19.0.0",
