@@ -1,6 +1,10 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 
+/**
+ * ChatBox component that connects to a WebSocket chat room.
+ * Users can send and receive messages in real-time.
+ */
 const ChatBox = () => {
   const [messages, setMessages] = useState<string[]>([]); // Explicitly define the type as string[]
   const [message, setMessage] = useState("");
@@ -25,6 +29,10 @@ const ChatBox = () => {
     };
   }, []);
 
+  /**
+   * Sends the current message over the WebSocket connection.
+   * Ensures the WebSocket is open before sending.
+   */
   const sendMessage = () => {
     if (message && ws.current && ws.current.readyState === WebSocket.OPEN) {
       ws.current.send(message);

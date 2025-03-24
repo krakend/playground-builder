@@ -1,12 +1,18 @@
 import IntegrationLayout from '@/components/IntegrationLayout';
 
 ## About this demo
-OpenAPI/Swagger documentation can be generated with `krakend generate openapi.`
+Postman collections can be generated with `krakend generate openapi.`
 
 ## Command
+While the docker compose system is running, you can call the `krakend generate command` from the krakenD container or a new process. For instance:
 ```
 docker-compose exec krakend_ee krakend generate postman -c /etc/krakend/krakend.json -o /etc/krakend/demo/postman.json
 ```
+
+![Postman collection screenshot](https://www.krakend.io/images/documentation/postman-collections.png)
+
+## Documentation
+- [Postman collection generator](https://www.krakend.io/docs/enterprise/developer/postman/)
 
 export default function MDXPage({ children }) {
   return <IntegrationLayout>{children}</IntegrationLayout>

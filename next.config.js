@@ -14,13 +14,18 @@ const nextConfig = {
 
   // Configure `pageExtensions` to include MDX files
   pageExtensions: ["js", "jsx", "mdx", "ts", "tsx"],
+
   webpack(config) {
     config.module.rules.push({
       test: /\.svg$/,
       use: ["@svgr/webpack"],
     });
 
-    return config;
+    return { ...config,
+      optimization: {
+        minimize: false,
+      },
+    };
   },
 };
 

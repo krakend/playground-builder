@@ -1,18 +1,27 @@
 import IntegrationLayout from '@/components/IntegrationLayout';
 
 ## About this demo
-OpenAPI/Swagger documentation can be generated with `krakend generate openapi.`
+From an existing KrakenD API Gateway specification you can create automatically its OpenAPI documentation with `krakend openapi export.`
 
-## Endpoint
-```
-http://localhost:16686/search
-```
+But if you have an existing OpenAPI specification you can create a KrakenD Configuration from it.
 
-## Command
+![OpenAPI generation screenshot](https://www.krakend.io/images/documentation/openapi-generator.png)
+
+## Export to OpenAPI
 ```
 docker-compose exec krakend_ee krakend openapi export -c /etc/krakend/krakend.json -o /etc/krakend/demo/swagger.json
 ```
 
+## Import to OpenAPI
+If you have an `openapi.yaml` file you can do:
+```
+docker-compose exec krakend_ee krakend openapi import -s openapi.yaml -o newkrakend.json
+```
+
+## Documentation
+
+- [Export to OpenAPI](https://www.krakend.io/docs/enterprise/developer/openapi/#exporting-to-openapi)
+- [Import from OpenAPI](https://www.krakend.io/docs/enterprise/developer/openapi/#importing-from-openapi)
 
 export default function MDXPage({ children }) {
   return <IntegrationLayout>{children}</IntegrationLayout>

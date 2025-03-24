@@ -2,17 +2,33 @@
   .no-scrollbar {
     -ms-overflow-style: none;
     scrollbar-width: none;
+
     &::-webkit-scrollbar {
       display: none;
     }
+
     &::-moz-scrollbar {
       display: none;
     }
+
     &::-o-scrollbar {
       display: none;
     }
   }
+
   code {
     color: #0071ce;
+  }
+
+  pre::-webkit-scrollbar-thumb,
+  code::-webkit-scrollbar-thumb {
+    border-radius: 3px;
+    @apply bg-brand-neutral-300;
+  }
+
+  pre::-webkit-scrollbar,
+  code::-webkit-scrollbar {
+    background: transparent;
+    @apply size-1;
   }
 }

@@ -3,10 +3,38 @@ import IntegrationLayout from '@/components/IntegrationLayout';
 ## About this demo
 Jaeger collects traces and shows the complete funnel from user request to the impact in the backend.
 
-## Endpoint
+Demo Access: [http://localhost:16686/search](http://localhost:16686/search)
+
+**Call a few endpoints to record activity first**
+
+## Configuration
+
+Explore the `krakend.json` file and find the `telemetry/opentelemetry` block. You'll find the exporter for Jaeger:
+
+```json
+"telemetry/opentelemetry": {
+      "service_name": "krakend_prometheus_service",
+      "metric_reporting_period": 1,
+      "trace_sample_rate": 1,
+      "exporters": {
+        "otlp": [
+          {
+            "disable_metrics": true,
+            "disable_traces": false,
+            "host": "jaeger",
+            "name": "debug_jaeger",
+            "port": 4317,
+            "use_http": false
+          }
+        ]
+      }
+}
 ```
-http://localhost:16686/search
-```
+
+## Documentation
+
+- [Jaeger Telemetry Integration on KrakenD](https://www.krakend.io/docs/telemetry/jaeger/)
+- [OpenTelemetry](https://www.krakend.io/docs/telemetry/opentelemetry/)
 
 export default function MDXPage({ children }) {
   return <IntegrationLayout>{children}</IntegrationLayout>

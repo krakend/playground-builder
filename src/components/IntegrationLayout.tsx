@@ -1,14 +1,59 @@
-import Footer from "@/components/Footer";
-import Header from "@/components/Header";
 import integrationData from "@/data/integrations.json";
-import { ArrowLeftIcon } from "@heroicons/react/20/solid";
 import Image from "next/image";
 import { useRouter } from "next/router";
+import CtaRouteBack from "./Cta/CtaRouteBack";
+import DemoCta from "./Cta/DemoCta";
+import Layout from "./Layout";
 import SEO from "./SEO";
 
+interface IntegrationHeaderProps {
+  name: string;
+  title: string;
+  iconUrl?: string;
+}
+
+const IntegrationHeader: React.FC<IntegrationHeaderProps> = ({
+  name,
+  title,
+  iconUrl,
+}) => (
+  <div className="mt-10">
+    <div className="flex items-center gap-3 mb-2">
+      {iconUrl && (
+        <Image
+          src={iconUrl}
+          alt={`${name} logo`}
+          width={30}
+          height={30}
+          className="object-contain"
+        />
+      )}
+      <span className="uppercase tracking-wider text-sm text-brand-neutral-300">
+        {name}
+      </span>
+    </div>
+    <h1 className="heading--h2 mb-10 text-white">{title}</h1>
+  </div>
+);
+
+const IntegrationContent: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => (
+  <div className="prose--mdx" style={{ maxWidth: "none" }}>
+    {children}
+  </div>
+);
+
+/**
+ * IntegrationLayout component wraps content with integration-specific data.
+ *
+ * @param {Object} props - Component properties.
+ * @param {ReactNode} props.children - The content to be displayed.
+ * @returns {JSX.Element} The IntegrationLayout component.
+ */
 const IntegrationLayout = ({ children }) => {
   const router = useRouter();
-  let pathname = router.asPath.replace(/\/$/, "");
+  const pathname = router.asPath.replace(/\/$/, "");
 
   // Extract the slug from the pathname
   const slug = pathname.split("/").pop();
@@ -23,52 +68,26 @@ const IntegrationLayout = ({ children }) => {
   }
 
   return (
-    <>
+    <Layout>
       <SEO
         title={`${integration.title} | KrakenD Playground`}
-        description={integration.description}
+        description={integration.description[0]}
       />
 
-      <Header />
-
-      <div className="bg-brand-neutral-900 text-white">
-        <div className="container--boxed-xl py-8">
-          <button
-            onClick={() => router.back()}
-            className="bg-brand-neutral-600 hover:scale-95 transition-transform rounded-full px-4 py-2 flex items-center justify-center gap-1"
-          >
-            <ArrowLeftIcon className="size-5" />
-            <span className="text-base">Go back</span>
-          </button>
-
-          <div className="mt-10">
-            <div className="flex items-center gap-3 mb-2">
-              {integration.iconUrl && (
-                <Image
-                  src={integration.iconUrl}
-                  alt={`${integration.name} logo`}
-                  width={30}
-                  height={30}
-                  className="object-contain"
-                />
-              )}
-              <span className="uppercase tracking-wider text-sm text-brand-neutral-300">
-                {integration.name}
-              </span>
-            </div>
-            <h1 className="heading--h2 mb-10">{integration.title}</h1>
-          </div>
-
-          <div>
-            <div className="prose--mdx" style={{ maxWidth: "none" }}>
-              {children}
-            </div>
-          </div>
+      <section className="section--sm">
+        <div className="container--boxed">
+          <CtaRouteBack />
+          <IntegrationHeader
+            name={integration.name}
+            title={integration.title}
+            iconUrl={integration.iconUrl}
+          />
+          <IntegrationContent>{children}</IntegrationContent>
         </div>
-      </div>
+      </section>
 
-      <Footer />
-    </>
+      <DemoCta />
+    </Layout>
   );
 };
 

@@ -1,6 +1,12 @@
 "use client";
-import React, { useState, useRef } from "react";
+import React, { useRef, useState } from "react";
 
+/**
+ * A WebSocket-based chat component.
+ * Allows users to connect to a chat room, send messages, and receive real-time updates.
+ *
+ * @returns A real-time chat UI with WebSocket connection handling.
+ */
 const WebSocketChat: React.FC = () => {
   const [message, setMessage] = useState<string>("");
   const [messages, setMessages] = useState<string[]>([]);
@@ -9,6 +15,10 @@ const WebSocketChat: React.FC = () => {
   const [error, setError] = useState<string | null>(null); // Track connection error
   const socketRef = useRef<WebSocket | null>(null);
 
+  /**
+   * Establishes a WebSocket connection to the specified chat room.
+   * Handles connection errors and manages connection status.
+   */
   const connectWebSocket = () => {
     if (!room.trim()) {
       setError("Room name cannot be empty");
@@ -48,6 +58,9 @@ const WebSocketChat: React.FC = () => {
     };
   };
 
+  /**
+   * Sends a message through the WebSocket connection.
+   */
   const sendMessage = () => {
     if (socketRef.current && message.trim() !== "") {
       socketRef.current.send(message);
