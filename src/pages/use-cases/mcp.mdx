@@ -1,0 +1,44 @@
+import MdxLayout from '@/components/MdxLayout';
+
+
+## Endpoint
+```
+/mcp
+```
+
+## MCP Server - AI Gateway Integration
+
+This endpoint implements a **Model Context Protocol (MCP) server**, enabling AI and Large Language Model (LLM) integration with KrakenD.
+
+### About MCP
+
+The Model Context Protocol is a standard for exposing tools and data sources to AI assistants. This endpoint acts as a gateway that AI models can call to access structured data and execute backend operations.
+
+### Available Tools
+
+The MCP server exposes the following tool:
+
+**`get_country_info`** - Retrieves comprehensive country data by aggregating multiple public APIs:
+- REST Countries API (geography, population, borders, flags)
+- GraphQL Countries API (currency, languages, native names)
+
+### Usage
+
+This is a POST endpoint that accepts MCP protocol requests. AI assistants and LLMs can call this endpoint to access country information through a standardized protocol.
+
+Example country code: Use two-letter ISO 3166-1 alpha-2 codes (e.g., `ES` for Spain, `FR` for France, `US` for United States)
+
+### Technical Details
+
+- **Method**: POST only
+- **Timeout**: 15 seconds
+- **Protocol**: Model Context Protocol (MCP)
+- **Backend**: Aggregates REST and GraphQL APIs
+- **License**: Enterprise Edition only
+
+See the [AI Gateway documentation](https://www.krakend.io/docs/enterprise/ai-gateway/) for more information about MCP integration.
+
+
+export default function MDXPage({ children }) {
+  return <MdxLayout>{children}</MdxLayout>
+}
