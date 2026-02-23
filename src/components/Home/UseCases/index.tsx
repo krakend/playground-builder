@@ -26,8 +26,7 @@ const UseCases = ({ data }) => {
       </h2>
 
       <ul className="space-y-4">
-        {Object.keys(data).map((key: string) => {
-          if (key === "others") return null;
+        {Object.keys(data).filter(key => key !== "others").sort((a, b) => a.localeCompare(b)).map((key: string) => {
           return (
             <li key={key}>
               <Accordion heading={key.replace("_", " ")}>
