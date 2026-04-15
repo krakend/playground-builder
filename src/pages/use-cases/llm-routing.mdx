@@ -1,0 +1,64 @@
+import MdxLayout from '@/components/MdxLayout';
+
+## Endpoint
+```
+/llm-routing
+```
+
+## Multi-Provider LLM Routing
+
+Route AI requests to **three different LLM providers** from a single endpoint — no application code changes needed. KrakenD inspects the `X-Model` header and forwards the request to the right provider.
+
+### How it works
+
+The gateway uses **conditional backends** with a header-based strategy. Each backend targets a different LLM provider and activates only when its condition matches:
+
+```json
+"backend/conditional": {
+  "strategy": "header",
+  "name": "X-Model",
+  "value": "gemini"
+}
+```
+
+When no header matches, a **fallback** backend handles the request — in this case, Anthropic.
+
+### Supported Providers
+
+- **`X-Model: gemini`** → Google Gemini (gemini-2.5-flash)
+- **`X-Model: openai`** → OpenAI (gpt-4o-mini)
+- **No header** → Anthropic fallback (claude-3-haiku)
+
+### Try it
+
+Try it interactively in the [Playground SPA](http://localhost:3000#ai-gateway/llm-routing), or via curl:
+
+```bash
+# Route to Gemini
+curl -XPOST -H'X-Model: gemini' \
+  --json '{"contents":"What is an API gateway?"}' \
+  http://localhost:8080/llm-routing
+
+# Route to OpenAI
+curl -XPOST -H'X-Model: openai' \
+  --json '{"contents":"Write a haiku about APIs"}' \
+  http://localhost:8080/llm-routing
+
+# Default to Anthropic (no header)
+curl -XPOST \
+  --json '{"contents":"Name 3 benefits of API gateways"}' \
+  http://localhost:8080/llm-routing
+```
+
+### Why this matters
+
+Switch LLM providers, run A/B tests between models, or set up cost-optimized fallback chains — all from gateway configuration, without touching your application.
+
+> **Note:** This demo uses the `X-Model` header as the routing key, but KrakenD's conditional routing supports any strategy: headers, JWT claims, query parameters, cookies, or custom CEL policies. You define the rules that fit your architecture.
+
+See the [LLM Routing documentation](https://www.krakend.io/docs/enterprise/ai-gateway/llm-routing/) and [Conditional Routing](https://www.krakend.io/docs/enterprise/backends/conditional/)
+
+
+export default function MDXPage({ children }) {
+  return <MdxLayout>{children}</MdxLayout>
+}
