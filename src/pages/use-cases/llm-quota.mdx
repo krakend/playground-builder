@@ -1,0 +1,65 @@
+import MdxLayout from '@/components/MdxLayout';
+
+## Endpoint
+```
+/llm-quota
+```
+
+## Token Quota Management
+
+Control AI spend with **per-user token budgets** enforced at the gateway level. KrakenD tracks token consumption in Redis and rejects requests when the budget is exhausted.
+
+### How it works
+
+Three components work together:
+
+1. **Redis** stores quota counters persistently (survives restarts and deployments)
+2. **`governance/processors`** defines the quota rules and tiers at the service level
+3. **`governance/quota`** enforces the quota on this specific endpoint, matching users to tiers via JWT claims
+
+```json
+"governance/quota": {
+  "quota_name": "llm_tokens",
+  "weight_key": "credits_consumed",
+  "weight_strategy": "body",
+  "tier_key": "X-Role"
+}
+```
+
+### Quota Tiers
+
+- **Moderator** (poweruser) — 10,000 tokens/day, identified by email from JWT
+- **Reader** (basic) — 1,000 tokens/day, identified by email from JWT
+
+### Try it
+
+Try it interactively in the [Playground SPA](http://localhost:3000#ai-gateway/llm-quota) — make several requests and watch the quota decrease.
+
+```bash
+# Login and make requests until quota runs out
+TOKEN=$(curl -s -d'grant_type=password&client_id=playground&client_secret=HA7yGHBNm5IBBSJYsSgtmJgnqdeeItrw&username=reader&password=reader' \
+  http://localhost:8085/realms/krakend/protocol/openid-connect/token | jq -r .access_token)
+
+# First requests succeed (check quota headers in the response)
+curl -XPOST -H"Authorization: Bearer $TOKEN" \
+  --json '{"contents":"What is 2+2?"}' \
+  http://localhost:8080/llm-quota
+
+# After exceeding 1000 tokens → HTTP 429
+curl -XPOST -H"Authorization: Bearer $TOKEN" \
+  --json '{"contents":"Tell me a long story"}' \
+  http://localhost:8080/llm-quota
+```
+
+### Why this matters
+
+Prevent runaway AI costs without writing budget logic in your application. Define usage tiers that map to your subscription plans, and let the gateway enforce them automatically.
+
+> **Note:** This demo uses two tiers based on JWT roles, but the quota system supports unlimited tiers, multiple time windows (per hour, day, month), and different identification strategies (header, IP, JWT claim). Tailor it to your pricing model.
+
+See the [Quota documentation](https://www.krakend.io/docs/enterprise/governance/quota/) and [AI Budget Control](https://www.krakend.io/docs/enterprise/ai-gateway/budget-control/)
+
+
+export default function MDXPage({ children }) {
+  return <MdxLayout>{children}</MdxLayout>
+}

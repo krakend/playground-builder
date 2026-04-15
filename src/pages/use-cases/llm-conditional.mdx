@@ -1,0 +1,63 @@
+import MdxLayout from '@/components/MdxLayout';
+
+## Endpoint
+```
+/llm-conditional
+```
+
+## Role-Based LLM Routing
+
+Automatically route users to **different AI models based on their JWT role** — premium users get a premium model, standard users get a cost-efficient one. Zero application logic required.
+
+### How it works
+
+KrakenD validates the JWT token via Keycloak, extracts the user's role using `propagate_claims`, and evaluates a **conditional backend policy** to decide which LLM handles the request:
+
+```json
+"backend/conditional": {
+  "strategy": "policy",
+  "value": "req_headers['X-Role'][0].contains('moderator')"
+}
+```
+
+The role claim from the JWT is propagated as a request header, making it available to the conditional routing engine.
+
+### Routing Rules
+
+- **Moderator** → OpenAI (gpt-4o-mini) — premium model for power users
+- **Reader** → Google Gemini (gemini-2.5-flash) — cost-efficient model for standard users
+
+### Try it
+
+Try it interactively in the [Playground SPA](http://localhost:3000#ai-gateway/llm-conditional) — log in with different users to see the routing change.
+
+```bash
+# Login as moderator → routed to OpenAI
+TOKEN=$(curl -s -d'grant_type=password&client_id=playground&client_secret=HA7yGHBNm5IBBSJYsSgtmJgnqdeeItrw&username=moderator&password=moderator' \
+  http://localhost:8085/realms/krakend/protocol/openid-connect/token | jq -r .access_token)
+
+curl -XPOST -H"Authorization: Bearer $TOKEN" \
+  --json '{"contents":"What AI model are you?"}' \
+  http://localhost:8080/llm-conditional
+
+# Login as reader → routed to Gemini
+TOKEN=$(curl -s -d'grant_type=password&client_id=playground&client_secret=HA7yGHBNm5IBBSJYsSgtmJgnqdeeItrw&username=reader&password=reader' \
+  http://localhost:8085/realms/krakend/protocol/openid-connect/token | jq -r .access_token)
+
+curl -XPOST -H"Authorization: Bearer $TOKEN" \
+  --json '{"contents":"What AI model are you?"}' \
+  http://localhost:8080/llm-conditional
+```
+
+### Why this matters
+
+Implement tiered AI access for your platform — give premium subscribers the best models while controlling costs for free-tier users. The routing decision lives entirely in the gateway configuration and your identity provider.
+
+> **Note:** This demo routes based on the `moderator` role from Keycloak, but KrakenD works with any JWT-compliant identity provider and any claim structure. You define the policies that match your authorization model.
+
+See the [Conditional Routing documentation](https://www.krakend.io/docs/enterprise/backends/conditional/) and [JWT Validation](https://www.krakend.io/docs/authorization/jwt-validation/)
+
+
+export default function MDXPage({ children }) {
+  return <MdxLayout>{children}</MdxLayout>
+}

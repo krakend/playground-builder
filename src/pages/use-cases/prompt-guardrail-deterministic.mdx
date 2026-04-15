@@ -1,0 +1,68 @@
+import MdxLayout from '@/components/MdxLayout';
+
+## Endpoint
+```
+/prompt-guardrail-deterministic
+```
+
+## Deterministic Prompt Guardrail
+
+Block sensitive data from reaching your LLM using **regex pattern validation** at the gateway. Credit card numbers, passwords, and API keys are caught and rejected before consuming any AI tokens.
+
+### How it works
+
+KrakenD's **JSON Schema validator** inspects the request body before forwarding to the LLM backend. Prompts matching any forbidden pattern are rejected with HTTP 400:
+
+```json
+"validation/json-schema": {
+  "properties": {
+    "contents": {
+      "allOf": [
+        { "not": { "pattern": "\\b\\d{4}[\\s-]?\\d{4}[\\s-]?\\d{4}[\\s-]?\\d{4}\\b" } },
+        { "not": { "pattern": "(?i)password\\s*(is)?\\s*[:=]" } },
+        { "not": { "pattern": "(?i)secret\\s*(is)?\\s*[:=]" } },
+        { "not": { "pattern": "(?i)api[_\\s-]?key\\s*[:=]" } }
+      ]
+    }
+  }
+}
+```
+
+### What gets blocked
+
+- **Credit card numbers** (e.g. `4111-1111-1111-1111`) → HTTP 400
+- **Passwords** (e.g. `password = SuperSecret123`) → HTTP 400
+- **Secrets** (e.g. `secret: my-db-password`) → HTTP 400
+- **API keys** (e.g. `api_key = sk-abc123xyz`) → HTTP 400
+- **Clean prompts** pass through to the LLM normally → HTTP 200
+
+### Try it
+
+Try it interactively in the [Playground SPA](http://localhost:3000#ai-gateway/guardrail-deterministic) — use the example buttons to test clean and blocked prompts.
+
+```bash
+# Clean prompt → passes through to LLM
+curl -XPOST --json '{"contents":"What is data encryption?"}' \
+  http://localhost:8080/prompt-guardrail-deterministic
+
+# Credit card → blocked (HTTP 400)
+curl -XPOST --json '{"contents":"Save my card 4111-1111-1111-1111"}' \
+  http://localhost:8080/prompt-guardrail-deterministic
+
+# Password → blocked (HTTP 400)
+curl -XPOST --json '{"contents":"password = SuperSecret123"}' \
+  http://localhost:8080/prompt-guardrail-deterministic
+```
+
+### Why this matters
+
+Prevent accidental data leaks to AI providers with zero latency overhead. Pattern-based validation runs inline with no external service calls, making it fast, predictable, and deterministic — ideal for compliance requirements.
+
+> **Note:** The regex patterns shown here are illustrative. KrakenD's JSON Schema validator supports the full JSON Schema specification — you can combine patterns, enforce field types, set length limits, and build validation rules as complex as your compliance requirements demand.
+
+See the [JSON Schema Validation documentation](https://www.krakend.io/docs/endpoints/json-schema/) and [AI Governance](https://www.krakend.io/docs/enterprise/ai-gateway/governance/)
+
+
+export default function MDXPage({ children }) {
+  return <MdxLayout>{children}</MdxLayout>
+}
