@@ -11,27 +11,49 @@ This is a Next.js application for building the KrakenD Playground demonstration 
 
 ## Repository Structure & Dependencies
 
-This project is part of a multi-repository setup and requires sibling repositories to function:
-
-### Required Sibling Repositories
+This project is part of a multi-repository setup:
 
 - `../playground-enterprise/` - Enterprise edition source and deployment target
 - `../playground-community/` - Community edition source and deployment target
 
-These repositories MUST:
-- Exist at exactly these relative paths from this repository
-- Contain `config/krakend/krakend.json` with endpoint definitions (both)
-- Contain `config/krakend/extended/templates/` with endpoint templates (enterprise)
-- Be up-to-date (the build copies data FROM them)
-
-### What This Repository Does
-
-- **Generates**: Static HTML/CSS/JS site from source data
-- **Reads FROM**: `../playground-{enterprise|community}/config/krakend/krakend.json` (source of truth)
-- **Writes TO**: `../playground-{enterprise|community}/config/krakend/demo/` (generated output)
-- **Does NOT**: Store source endpoint configurations (only copies during build)
+This repo **reads** `krakend.json` from sibling repos (source of truth) and **writes** generated static files back to them. The local file `public/demo/data/krakend.json` is a build artifact — never edit it directly.
 
 ⚠️ **If sibling repos are missing or outdated**, the build will fail or generate stale content.
+
+## Development Workflow
+
+### Pre-requisites
+
+Before building, ensure:
+- Sibling repositories exist at the paths above
+- They are on the correct branch and up-to-date (`git pull`)
+- Source `krakend.json` in sibling repos reflects the desired state
+
+### End-to-End Flow
+
+1. **Make changes in the sibling repo** (source of truth):
+   - Edit `config/krakend/krakend.json` (and/or `extended/templates/` for EE)
+   - Source files in sibling repos also include `extended/settings/**/*.yml`
+
+2. **Create or update MDX files** in this repo if endpoints changed:
+   - New endpoint → new MDX file in `src/pages/use-cases/`
+   - Removed endpoint → remove corresponding MDX file
+   - Changed endpoint config → review inline snippets in MDX (see Snippet Alignment below)
+
+3. **Build** with `make build_ce` or `make build_ee`
+   - This copies `krakend.json` from sibling repo, builds the static site, and copies output back
+
+4. **Verify** the generated site:
+   - `make serve_static` and check at `http://localhost:8080/demo`
+   - Run the validation script (see "Validating Content") to catch missing MDX files
+
+5. **Ask the user** how to proceed with commits — the changes may span multiple repos and be part of a larger workflow
+
+### Snippet Alignment
+
+MDX files may contain **inline code snippets** that reference specific configuration blocks (e.g., `auth/api-keys` settings). These snippets are hardcoded in the MDX and are NOT auto-generated from `krakend.json`.
+
+When modifying endpoint configurations in the sibling repos, **always review the corresponding MDX file** for inline snippets that may need updating to stay aligned with the actual configuration.
 
 ## Build Commands
 
@@ -74,7 +96,7 @@ docker run -it -v "$PWD/out:/usr/share/nginx/html/demo" -p "8080:80" nginx
 npm run lint
 ```
 
-## Environment Configuration
+### Environment Configuration
 
 Create a `.env` file in the root with:
 
@@ -98,37 +120,16 @@ NEXT_PUBLIC_KRAKEND_LICENSE_TYPE=open-source
    - **Integrations**: MDX files in `pages/integrations/` for enterprise and open-source integrations
 
 3. **Data Sources**:
-   - `public/demo/data/krakend.json`: Contains API endpoint configurations
+   - `public/demo/data/krakend.json`: API endpoint configurations (build artifact, copied from sibling repo)
    - `public/demo/data/integrations.json`: Integration documentation metadata
 
-### Build Process
-
-The build process follows this workflow:
-
-1. **Data Import**: Copies `krakend.json` from the source of truth in sibling repository:
-   - CE: `../playground-community/config/krakend/krakend.json`
-   - EE: `../playground-enterprise/config/krakend/krakend.json`
-
-   ⚠️ **IMPORTANT**:
-   - The local file `public/demo/data/krakend.json` is a build artifact (copy from source)
-   - Never edit it directly - changes will be overwritten on next build
-   - This file IS committed to track the last build state
-   - Always edit source files in sibling repositories:
-     - Main config: `config/krakend/krakend.json`
-     - Templates: `config/krakend/extended/templates/*.json`
-     - YAML configs: `config/krakend/extended/settings/**/*.yml`
-
-2. **Static Generation**: Next.js generates static files with:
+4. **Static Generation**: Next.js generates static files with:
    - MDX rendering for content pages
    - Tailwind CSS with SCSS for styling
    - SVG imports via SVGR (SVGs become React components)
    - Base path configured to `/demo` with trailing slashes enabled
    - Syntax highlighting via Prism.js for code blocks
    - Images unoptimized for static export compatibility
-
-3. **Output Distribution**: Build artifacts from `out/` are copied back to sibling repositories:
-   - CE: `../playground-community/config/krakend/demo`
-   - EE: `../playground-enterprise/config/krakend/demo`
 
 ### Routing and URL Generation
 
@@ -165,19 +166,7 @@ To change category order: modify the React component sorting logic, not the data
 
 ## Adding New Content
 
-⚠️ **CRITICAL: Where to Make Changes**
-
-This repository generates static content from source data in sibling repositories.
-
-**Edit these (source of truth)**:
-- `../playground-{enterprise|community}/config/krakend/krakend.json`
-- `../playground-{enterprise|community}/config/krakend/extended/templates/*.json`
-
-**Do not edit directly (build artifacts - but committed for tracking)**:
-- `public/demo/data/krakend.json` (copy from source, overwritten on each build)
-
-After editing source files, rebuild this project to regenerate the static site. The updated
-`krakend.json` copy should be committed to track the last successful build state.
+> See "Development Workflow" above for the full end-to-end process, including where to make changes (sibling repos are the source of truth).
 
 ### Adding Use Cases
 
