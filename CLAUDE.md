@@ -55,6 +55,15 @@ MDX files may contain **inline code snippets** that reference specific configura
 
 When modifying endpoint configurations in the sibling repos, **always review the corresponding MDX file** for inline snippets that may need updating to stay aligned with the actual configuration.
 
+### Credentials Redaction
+
+Source `krakend.json` in the sibling repos contains real LLM provider keys (Gemini / OpenAI / Anthropic) when compiled with `make start-with-ai-gateway`. The build pipeline strips those out before bundling into the static site:
+
+- `make build_ce` / `make build_ee` copy the sibling `krakend.json` and then call the `redact_credentials` target
+- `redact_credentials` runs a sed pass that replaces every `AIzaSy*` / `sk-proj-*` / `sk-ant-*` value with `<REDACTED_*_API_KEY>` placeholders
+
+Pre-commit invariant for `public/demo/data/krakend.json`: zero real credentials, only `<REDACTED_*_API_KEY>` placeholders.
+
 ## Build Commands
 
 ### Development
@@ -112,8 +121,14 @@ NEXT_PUBLIC_KRAKEND_LICENSE_TYPE=open-source
 
 1. **Layouts**:
    - `Layout.tsx`: Base layout with header and footer
-   - `MdxLayout.tsx`: Layout for use-case pages with endpoint documentation
-   - `IntegrationLayout.tsx`: Layout for integration documentation pages
+   - `MdxLayout.tsx`: Layout for use-case pages with endpoint documentation. Reads `resources` exported by each MDX and feeds it to `DemoResources` (rail above the prose) + `AIGatewayNotice` (top-right chip when `aiFeature: true`). Renders the METHOD + path chip inside the code panel header.
+   - `IntegrationLayout.tsx`: Layout for integration documentation pages. Same `resources` contract as MdxLayout.
+
+2. **Shared documentation components** (`src/components/`):
+   - `DemoResources.tsx`: standardised rail at the top of every detail page — Try it row (variants: `tryUrl` → URLInputBox, `interactive` → external link card) + Read the docs row.
+   - `URLInputBox.tsx`: address-bar-style component with an editable param + gradient Open button. Used as the `tryUrl` flavour of DemoResources.
+   - `AIGatewayNotice.tsx`: single morphing container that goes from a top-right chip ("Heads up: This is an AI Gateway feature") to an expanded modal explaining the license + provider-credentials prerequisites. Rendered when `resources.aiFeature === true`.
+   - `mdx-components.tsx`: provides a custom `<Pre>` that wraps every prose `<pre>` with a copy button matching the dedicated code panel's behaviour, and registers `DemoResources` as a globally-available MDX component.
 
 2. **Content Types**:
    - **Use Cases**: MDX files in `pages/use-cases/` showcasing KrakenD endpoints
@@ -177,24 +192,46 @@ To change category order: modify the React component sorting logic, not the data
    - Add OpenAPI metadata in `extra_config["documentation/openapi"]`
    - Add Postman metadata in `extra_config["documentation/postman"]`
    - If using templates, also update files in `extended/templates/`
+   - Endpoints whose `@comment` starts with `Utility:` or `Internal:` are infrastructure (gateway-side plumbing, internal aggregators, static asset servers) — they don't surface as user-facing cards and don't need an MDX file; the validation script skips them too.
 
-2. **Create MDX file** in `src/pages/use-cases/` with a filename matching the endpoint slug:
+2. **Create MDX file** in `src/pages/use-cases/` with a filename matching the endpoint slug. The page MUST export a `resources` block that drives the standardised Try it + Read the docs rail rendered above the prose:
 
 ```mdx
 import MdxLayout from '@/components/MdxLayout';
 
-## Endpoint
-```
-/your-endpoint
-```
+export const resources = {
+  // Optional. Renders an inline URL preview with an Open button. Use this
+  // when the endpoint can be hit directly via GET (no body, no required
+  // header). isStatic: true skips the editable param input.
+  tryUrl: {
+    endpoint: "http://localhost:8080/your-endpoint/",
+    placeholder: "param hint shown in the input",
+  },
+  // Optional. External link card — pick this when the meaningful test is
+  // a richer flow in the Interactive Demos SPA. Mutually exclusive with
+  // tryUrl (tryUrl wins if both are set).
+  interactive: {
+    url: "http://localhost:8080/interactive-demo/#your-tab",
+    label: "Your interactive demo label",
+  },
+  // Optional. Curated doc links shown in the Read the docs row.
+  docs: [
+    { url: "https://www.krakend.io/docs/...", label: "Topic name" },
+  ],
+  // Optional. AI Gateway demos set this to surface a top-right notice
+  // chip that morphs into a modal explaining the license + provider-key
+  // prerequisites (Gemini / OpenAI / Anthropic + `make start-with-ai-gateway`).
+  aiFeature: true,
+};
 
-## About this demo
-- Feature point one
-- Feature point two
-- Feature point three
+## Page title heading
+
+Body prose. Do NOT add a `## Endpoint /path` heading — the METHOD + path
+chip is rendered automatically inside the code panel header by the layout
+based on `krakend.json`.
 
 export default function MDXPage({ children }) {
-  return <MdxLayout>{children}</MdxLayout>
+  return <MdxLayout resources={resources}>{children}</MdxLayout>
 }
 ```
 
@@ -219,15 +256,26 @@ export default function MDXPage({ children }) {
    - Enterprise: `src/pages/integrations/enterprise/{slug}.mdx`
    - Open Source: `src/pages/integrations/open-source/{slug}.mdx`
    - Filename must match the `slug` field from JSON
+   - Same `resources` export pattern as use cases (see above); `interactive` is the natural fit when the integration opens a separate dashboard (Kibana / Grafana / Jaeger)
 
 ```mdx
 import IntegrationLayout from '@/components/IntegrationLayout';
+
+export const resources = {
+  interactive: {
+    url: "http://localhost:16686/search",
+    label: "Open Jaeger",
+  },
+  docs: [
+    { url: "https://www.krakend.io/docs/telemetry/jaeger/", label: "Jaeger telemetry" },
+  ],
+};
 
 ## About this demo
 Integration details and usage instructions...
 
 export default function MDXPage({ children }) {
-  return <IntegrationLayout>{children}</IntegrationLayout>
+  return <IntegrationLayout resources={resources}>{children}</IntegrationLayout>
 }
 ```
 
@@ -235,26 +283,10 @@ export default function MDXPage({ children }) {
 
 ### Validating Content
 
-After adding new endpoints, validate that all endpoints have corresponding MDX files:
+After adding or removing endpoints, run the validation script to catch MDX drift in either direction (missing files for new endpoints, orphan files for removed ones):
 
-**Quick validation script**:
-
-```javascript
-const fs = require('fs');
-const krakend = JSON.parse(fs.readFileSync('public/demo/data/krakend.json', 'utf8'));
-
-const createSlug = (endpoint) => endpoint.toLowerCase()
-  .replace(/ /g, "-").replace(/_/g, "-")
-  .replace(/[^a-z0-9/-]/g, "").replace(/(?!^)\//g, "-")
-  .replace(/--+/g, "-").replace(/-$/g, "").replace("/", "");
-
-const missingFiles = krakend.endpoints
-  .map(ep => createSlug(ep.endpoint))
-  .filter(slug => !fs.existsSync(`src/pages/use-cases/${slug}.mdx`));
-
-if (missingFiles.length > 0) {
-  console.log("Missing MDX files:", missingFiles);
-}
+```bash
+node scripts/validate-mdx.js
 ```
 
-This helps catch missing documentation before deployment.
+It reads the compiled `public/demo/data/krakend.json`, filters out `Utility:` / `Internal:` endpoints (same filter the homepage applies), and confirms a 1-to-1 mapping with `src/pages/use-cases/*.mdx`. Exits 1 on any drift, intended for CI / pre-build sanity checks.
