@@ -13,7 +13,7 @@ type Props = {
  * @param {string | React.ReactNode} heading - The heading of the accordion.
  * @returns {JSX.Element} The rendered Accordion component.
  */
-function Accordion({ children, heading }: Props): JSX.Element {
+function Accordion({ children, heading }: Props) {
   const ref = useRef<HTMLDivElement>(null);
 
   /**

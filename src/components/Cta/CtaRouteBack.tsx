@@ -5,7 +5,7 @@ type props = {
   wrapperClassname?: string;
 };
 
-function CtaRouteBack({ wrapperClassname = "" }: props): JSX.Element {
+function CtaRouteBack({ wrapperClassname = "" }: props) {
   const router = useRouter();
 
   const handleBack = useCallback(() => {

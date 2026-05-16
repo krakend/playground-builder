@@ -5,7 +5,7 @@ import Link from "next/link";
 /**
  * DemoCta — gradient panel with a single primary CTA.
  */
-function DemoCta(): JSX.Element {
+function DemoCta() {
   return (
     <section className="py-10 lg:py-14">
       <div className="container--boxed">
