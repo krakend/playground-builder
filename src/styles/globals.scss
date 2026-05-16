@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Source+Code+Pro:wght@400;500;600&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -12,8 +14,9 @@
 @import "./components/_gradient";
 @import "./components/_testimonials";
 @import "./components/_shadow";
+@import "./components/_card";
+@import "./components/_code-panel";
 
 /* Vendor */
-// @import 'vendor/prism-material-dark.css';
 @import 'vendor/prism-atom-dark.css';
-// @import 'vendor/prism-vsc-dark.css';
+@import 'prismjs/plugins/line-numbers/prism-line-numbers.css';

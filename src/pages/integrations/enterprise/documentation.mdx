@@ -1,5 +1,12 @@
 import IntegrationLayout from '@/components/IntegrationLayout';
 
+export const resources = {
+  docs: [
+    { url: "https://www.krakend.io/docs/enterprise/developer/openapi/#exporting-to-openapi", label: "Export to OpenAPI" },
+    { url: "https://www.krakend.io/docs/enterprise/developer/openapi/#importing-from-openapi", label: "Import from OpenAPI" }
+  ]
+};
+
 ## About this demo
 From an existing KrakenD API Gateway specification you can create automatically its OpenAPI documentation with `krakend openapi export.`
 
@@ -8,21 +15,16 @@ But if you have an existing OpenAPI specification you can create a KrakenD Confi
 ![OpenAPI generation screenshot](https://www.krakend.io/images/documentation/openapi-generator.png)
 
 ## Export to OpenAPI
-```
+```bash
 docker-compose exec krakend_ee krakend openapi export -c /etc/krakend/krakend.json -o /etc/krakend/demo/swagger.json
 ```
 
 ## Import to OpenAPI
 If you have an `openapi.yaml` file you can do:
-```
+```bash
 docker-compose exec krakend_ee krakend openapi import -s openapi.yaml -o newkrakend.json
 ```
 
-## Documentation
-
-- [Export to OpenAPI](https://www.krakend.io/docs/enterprise/developer/openapi/#exporting-to-openapi)
-- [Import from OpenAPI](https://www.krakend.io/docs/enterprise/developer/openapi/#importing-from-openapi)
-
 export default function MDXPage({ children }) {
-  return <IntegrationLayout>{children}</IntegrationLayout>
+  return <IntegrationLayout resources={resources}>{children}</IntegrationLayout>
 }

@@ -1,15 +1,24 @@
 import MdxLayout from '@/components/MdxLayout';
 
-## About this demo
-- One
-- Two
-- Three
+export const resources = {
+  tryUrl: {
+    endpoint: "http://localhost:8080/dynamic/qs?route=hello",
+    isStatic: true
+  },
+  docs: [
+    { url: "https://www.krakend.io/docs/enterprise/endpoints/dynamic-routing/", label: "Dynamic Routing" },
+    { url: "https://www.krakend.io/docs/enterprise/security-policies/policy-language/", label: "Security Policies" }
+  ]
+};
 
-## Endpoint
-```
-/
-```
+## Dynamic routing from a query string
+
+This endpoint rewrites the upstream URL on the fly using a value coming from the **query string**. The `url_pattern` references the variable `{input_query_strings.route}`, so a call to `/dynamic/qs?route=hello` ends up hitting `/__debug/hello` on the backend.
+
+Same idea as the [header-based variant](/demo/use-cases/dynamic-header) — only the source of the routing key changes. Both demonstrate KrakenD's ability to construct the upstream path at request time instead of declaring it statically.
+
+> **Security note:** When the routing value comes from user input you should pair this with a [Security Policy](https://www.krakend.io/docs/enterprise/security-policies/) that whitelists acceptable values. Otherwise callers can steer requests to anywhere the backend exposes.
 
 export default function MDXPage({ children }) {
-  return <MdxLayout>{children}</MdxLayout>
+  return <MdxLayout resources={resources}>{children}</MdxLayout>
 }

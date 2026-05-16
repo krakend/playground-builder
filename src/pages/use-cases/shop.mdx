@@ -1,9 +1,11 @@
 import MdxLayout from '@/components/MdxLayout';
 
-## Endpoint
-```http
-/shop
-```
+export const resources = {
+  docs: [
+    { url: "https://www.krakend.io/docs/endpoints/rate-limit/", label: "Endpoint rate limit" },
+    { url: "https://www.krakend.io/docs/backends/rate-limit/", label: "Backend rate limit" }
+  ]
+};
 
 ## Stateless rate limiting
 This use case demonstrates two different types of stateless rate limiting while doing API composition:
@@ -19,16 +21,13 @@ Now, if you call this endpoint more than 1-2 times per second, you will start to
 ### Rate limit exceeded
 If you call the `/shop` endpoint more than 2 times within one second you will get an error status code and no response:
 
-```
+```bash
 curl -i http://localhost:8080/shop
 ```
 
 ### Partially rate-limited
 If you call the endpoint quickly enough not to pass the 2 requests per second but surpass 1 request per second, then you will have a partial response containing the backend that is not a rate limit at the proxy level. So the response contains `campaigns` but it does not have `products`.
 
-To see all types of rate limiting, see the [Throttling documentation](https://www.krakend.io/docs/enterprise/throttling/)
-
-
 export default function MDXPage({ children }) {
-  return <MdxLayout>{children}</MdxLayout>
+  return <MdxLayout resources={resources}>{children}</MdxLayout>
 }

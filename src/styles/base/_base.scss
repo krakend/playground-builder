@@ -1,9 +1,16 @@
 html {
-  @apply bg-brand-neutral-900;
+  @apply bg-brand-neutral-900 font-sans;
+  /* Reserve scrollbar space always so locking body scroll (e.g. opening the
+     AI notice modal) doesn't shift the page content horizontally. */
+  scrollbar-gutter: stable;
 }
 
 body {
-  // @apply antialiased;
+  @apply text-white antialiased;
+}
+
+code, pre, kbd, samp {
+  font-family: 'Source Code Pro', monospace;
 }
 
 pre code {

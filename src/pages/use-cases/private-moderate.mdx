@@ -1,10 +1,14 @@
 import MdxLayout from '@/components/MdxLayout';
 
-
-## Endpoint
-```
-/private/moderate
-```
+export const resources = {
+  interactive: {
+    url: "http://localhost:8080/interactive-demo/#auth-demo/public-private",
+    label: "Public / private auth demo"
+  },
+  docs: [
+    { url: "https://www.krakend.io/docs/authorization/jwt-validation/", label: "JWT Validation" }
+  ]
+};
 
 ## Endpoint with JWT Authorization
 This endpoint requires the request to provide a valid JWT token to access the contents.
@@ -13,10 +17,6 @@ The token signature is then checked against the public key specified in the `jwk
 
 Replace the `jwk_url` with your Keycloak instance and users to test this endpoint.
 
-See the [JWT Validation](https://www.krakend.io/docs/enterprise/authorization/jwt-validation/) documentation for more info and other providers
-
-Try it interactively in the [Playground SPA](http://localhost:3000#auth-demo/public-private) — log in to access this endpoint.
-
 export default function MDXPage({ children }) {
-  return <MdxLayout>{children}</MdxLayout>
+  return <MdxLayout resources={resources}>{children}</MdxLayout>
 }

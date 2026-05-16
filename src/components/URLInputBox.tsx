@@ -9,15 +9,9 @@ interface URLInputBoxProps {
 }
 
 /**
- * A reusable URL input component that dynamically generates a complete URL.
- * Users can enter a value, which gets appended to the given `endpoint`.
- * The resulting URL is displayed with an option to open it in a new tab.
- *
- * @param endpoint The base endpoint to prepend to the input value.
- * @param placeholder The placeholder text for the input field.
- * @param helpText A small help text displayed below the input field.
- * @param isStatic If `true`, disables input and only displays the endpoint.
- * @returns A styled URL input box with a preview link.
+ * Address-bar-style component for previewing and opening a gateway URL.
+ * Renders the endpoint base in muted text + an input the user can type into,
+ * with a single primary action ("View") that opens the result in a new tab.
  */
 const URLInputBox: React.FC<URLInputBoxProps> = ({
   endpoint,
@@ -26,59 +20,38 @@ const URLInputBox: React.FC<URLInputBoxProps> = ({
   isStatic = false,
 }) => {
   const inputRef = useRef<HTMLInputElement>(null);
-  const [completeUrl, setCompleteUrl] = useState(endpoint || ""); // State to store the complete URL
+  const [completeUrl, setCompleteUrl] = useState(endpoint || "");
 
-  /**
-   * Focuses the input field when the surrounding div is clicked.
-   */
-  const handleDivClick = () => {
-    if (inputRef.current) {
-      inputRef.current.focus(); // Focus the input
-    }
+  const handleClick = () => {
+    inputRef.current?.focus();
   };
 
-  /**
-   * Handles changes in the input field and updates the complete URL.
-   *
-   * @param e The input change event.
-   */
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const inputValue = e.target.value;
+    const value = e.target.value;
     const newUrl = endpoint
-      ? `${endpoint.replace(/\/$/, "")}/${inputValue}`
-      : inputValue;
+      ? `${endpoint.replace(/\/$/, "")}/${value}`
+      : value;
     setCompleteUrl(newUrl);
   };
 
   return (
-    <div className="not-prose">
-      <div
-        className="bg-white py-4 px-4 rounded-md flex flex-col sm:flex-row sm:items-center sm:justify-between relative"
-        onClick={handleDivClick}
-        // skipcq: JS-0417
-        onKeyDown={(e) => {
-          if (e.key === "Enter" || e.key === " ") {
-            handleDivClick();
-          }
-        }}
-        role="textbox"
-        tabIndex={0}
-      >
-        <div className="flex text-brand-neutral-600 w-full">
-          <p className="shrink-0">{endpoint || ""}</p>
+    <div className="not-prose my-6">
+      <div className="url-input-box" onClick={handleClick}>
+        <span className="url-input-box__scheme">GET</span>
+        <div className="url-input-box__field">
+          <span className="url-input-box__base">{endpoint || ""}</span>
           {!isStatic && (
             <input
               ref={inputRef}
               type="text"
               placeholder={placeholder}
-              className="focus:outline-none w-full"
+              className="url-input-box__input"
               onChange={handleInputChange}
             />
           )}
         </div>
-
         <a
-          className="bg-brand-neutral-900 text-white rounded-md px-6 py-2 absolute top-2 right-2 flex items-center gap-1"
+          className="url-input-box__view"
           href={completeUrl}
           target="_blank"
           rel="noopener noreferrer"
@@ -87,7 +60,7 @@ const URLInputBox: React.FC<URLInputBoxProps> = ({
         </a>
       </div>
       {helpText && (
-        <small className="mt-2 text-sm font-normal">{helpText}</small>
+        <p className="mt-2 text-xs text-brand-neutral-300">{helpText}</p>
       )}
     </div>
   );

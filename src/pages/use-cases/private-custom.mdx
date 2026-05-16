@@ -1,19 +1,26 @@
 import MdxLayout from '@/components/MdxLayout';
 
-## Endpoint
-```
-/private/custom
+export const resources = {
+  docs: [
+    { url: "https://www.krakend.io/docs/authorization/jwt-validation/", label: "JWT Validation" },
+    { url: "https://www.krakend.io/docs/authorization/jwt-signing/", label: "JWT Signing" }
+  ]
+};
+
+## JWT validation using a KrakenD-signed token
+
+This endpoint is the consumer side of the [`/token`](/demo/use-cases/token) signing flow: it validates JWTs signed by the same gateway with the matching HS256 key. Useful when you don't have an external identity provider and want the gateway to act as both issuer and validator.
+
+To test it, first hit `/token` to get a signed access token, then call this endpoint with it:
+
+```bash
+TOKEN=$(curl -s http://localhost:8080/token | jq -r .access_token)
+
+curl -H "Authorization: Bearer $TOKEN" http://localhost:8080/private/custom
 ```
 
-## JWT auth using a token signed by KrakenD
-This use case protects an endpoint that requires a token that has been signed by KrakenD at the [`/token` endpoint](/demo/use-cases/token)
-
-After getting the `/token` replace the `$TOKEN` below and test:
-
-```
- curl -H"Authorization: Bearer $TOKEN" http://localhost:8080/private/custom
-```
+For a setup with an external IdP (Keycloak) instead, see [`/private/moderate`](/demo/use-cases/private-moderate).
 
 export default function MDXPage({ children }) {
-  return <MdxLayout>{children}</MdxLayout>
+  return <MdxLayout resources={resources}>{children}</MdxLayout>
 }

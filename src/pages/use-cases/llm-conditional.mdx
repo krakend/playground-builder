@@ -1,11 +1,19 @@
 import MdxLayout from '@/components/MdxLayout';
 
-## Endpoint
-```
-/llm-conditional
-```
+export const resources = {
+  aiFeature: true,
+  interactive: {
+    url: "http://localhost:8080/interactive-demo/#ai-gateway/llm-conditional",
+    label: "AI Gateway · Conditional LLM"
+  },
+  docs: [
+    { url: "https://www.krakend.io/docs/enterprise/backends/conditional/", label: "Conditional Routing" },
+    { url: "https://www.krakend.io/docs/authorization/jwt-validation/", label: "JWT Validation" }
+  ]
+};
 
 ## Role-Based LLM Routing
+
 
 Automatically route users to **different AI models based on their JWT role** — premium users get a premium model, standard users get a cost-efficient one. Zero application logic required.
 
@@ -29,7 +37,7 @@ The role claim from the JWT is propagated as a request header, making it availab
 
 ### Try it
 
-Try it interactively in the [Playground SPA](http://localhost:3000#ai-gateway/llm-conditional) — log in with different users to see the routing change.
+Run from the CLI to see the routing change between roles:
 
 ```bash
 # Login as moderator → routed to OpenAI
@@ -55,9 +63,6 @@ Implement tiered AI access for your platform — give premium subscribers the be
 
 > **Note:** This demo routes based on the `moderator` role from Keycloak, but KrakenD works with any JWT-compliant identity provider and any claim structure. You define the policies that match your authorization model.
 
-See the [Conditional Routing documentation](https://www.krakend.io/docs/enterprise/backends/conditional/) and [JWT Validation](https://www.krakend.io/docs/authorization/jwt-validation/)
-
-
 export default function MDXPage({ children }) {
-  return <MdxLayout>{children}</MdxLayout>
+  return <MdxLayout resources={resources}>{children}</MdxLayout>
 }

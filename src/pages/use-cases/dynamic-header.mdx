@@ -1,9 +1,11 @@
 import MdxLayout from '@/components/MdxLayout';
 
-## Endpoint
-```http
-/dynamic/header
-```
+export const resources = {
+  docs: [
+    { url: "https://www.krakend.io/docs/enterprise/endpoints/dynamic-routing/", label: "Dynamic Routing" },
+    { url: "https://www.krakend.io/docs/enterprise/security-policies/policy-language/", label: "Security Policies" }
+  ]
+};
 
 ## Dynamic routing
 Dynamic routing extends the routing capabilities to add header, tokens, and query string processing to assemble the final upstream URL you want to reach. This use case demonstrates how to route to a specific URL, taking into account the value of the `X-Route` header.
@@ -12,12 +14,10 @@ The configuration introduces a variable `{input_headers.x-route}` that injects t
 
 You can test this configuration with:
 
-```
+```bash
 curl -iG -H 'X-Route: hello' 'http://localhost:8080/dynamic/header'
 ```
 
-See the [Dynamic Routing documentation](https://www.krakend.io/docs/enterprise/endpoints/dynamic-routing/) for more details.
-
 export default function MDXPage({ children }) {
-  return <MdxLayout>{children}</MdxLayout>
+  return <MdxLayout resources={resources}>{children}</MdxLayout>
 }

@@ -1,10 +1,15 @@
 import MdxLayout from '@/components/MdxLayout';
-import URLInputBox from '@/components/URLInputBox';
 
-## Endpoint
-```http
-/cryptos/{currency}
-```
+export const resources = {
+  tryUrl: {
+    endpoint: "http://localhost:8080/cryptos/",
+    placeholder: "eur or usd"
+  },
+  docs: [
+    { url: "https://www.krakend.io/docs/enterprise/endpoints/jmespath/", label: "JMESPath" },
+    { url: "https://play.jmespath.org/", label: "JMESPath playground" }
+  ]
+};
 
 ## Advanced manipulation with JMESPath
 This use case demonstrates a complex manipulation of data using an expression. It queries a CoinGecko API endpoint ([see the raw data](https://api.coingecko.com/api/v3/coins/markets?vs_currency=EUR&order=market_cap_desc&per_page=100&page=1&sparkline=false)) that returns data for over 100 cryptocurrencies. Each cryptocurrency returns an object like this:
@@ -44,14 +49,6 @@ The final part of the expression `[*].{}` takes all elements from the response a
 
 Then, it sorts the resulting collection by `&name` (it could be the `market_cap` or anything else) with the expression `sort_by()` and then flips the order entirely with `reverse()`.
 
-## Documentation
-- [JMESPath documentation](https://www.krakend.io/docs/enterprise/endpoints/jmespath/)
-- [Interactive JMESPath playground](https://play.jmespath.org/)
-
-Write the `EUR` or `USD` currency, and open the link:
-<URLInputBox endpoint="http://localhost:8080/cryptos/" placeholder="currency" />
-
-
 export default function MDXPage({ children }) {
-  return <MdxLayout>{children}</MdxLayout>
+  return <MdxLayout resources={resources}>{children}</MdxLayout>
 }

@@ -1,0 +1,386 @@
+@layer components {
+  /* Demo card — used on the home grid for use cases and integrations.
+     The whole card is the link target. Subtle border that turns lavender on
+     hover, lifts on focus. */
+  .demo-card {
+    @apply relative flex flex-col h-full p-5 rounded-xl bg-brand-neutral-700
+           border border-solid border-brand-neutral-600 cursor-pointer
+           transition-all duration-200 no-underline;
+  }
+  .demo-card:hover {
+    border-color: #ab83ff;
+    transform: translateY(-2px);
+    box-shadow: 0 12px 24px -8px rgba(171, 131, 255, 0.25);
+  }
+  .demo-card .demo-card__tag {
+    @apply text-xs font-mono font-semibold uppercase tracking-eyebrow bg-clip-text text-transparent;
+    background-image: linear-gradient(96deg, #ab83ff 0%, #4177fd 75%);
+  }
+  .demo-card .demo-card__title {
+    @apply mt-2 text-base font-semibold text-white leading-snug;
+    transition: color 0.2s ease;
+  }
+  .demo-card:hover .demo-card__title { color: #cdb3ff; }
+
+  /* Demo resources — stacked rail rendered above the prose. Two cells
+     (try + docs) grouped inside a single rounded container so the page's
+     primary actions stay anchored together at the top of the right column. */
+  .demo-resources {
+    @apply flex flex-col rounded-xl overflow-hidden;
+    background: rgba(26, 29, 42, 0.7);
+    border: 1px solid rgba(54, 57, 68, 0.6);
+  }
+  .demo-resources__row {
+    @apply flex items-center gap-3 px-4 py-3 text-base no-underline min-w-0;
+    background: transparent;
+    border: none;
+  }
+  .demo-resources__row + .demo-resources__row {
+    border-top: 1px solid rgba(54, 57, 68, 0.6);
+  }
+  .demo-resources__row--cta { transition: background 0.15s ease; }
+  .demo-resources__row--cta:hover {
+    background: rgba(171, 131, 255, 0.08);
+  }
+  .demo-resources__row--try { padding-right: 0; padding-top: 0; padding-bottom: 0; min-height: 48px; }
+  .demo-resources__row--endpoint { padding-top: 0.65rem; padding-bottom: 0.65rem; }
+
+  /* tryUrl variant — input field embedded in the row + Open action button. */
+  .demo-resources__try-field {
+    @apply flex flex-1 items-center min-w-0 cursor-text;
+    font-family: 'Source Code Pro', monospace;
+    font-size: 0.95rem;
+  }
+  .demo-resources__try-base {
+    @apply text-brand-neutral-300 whitespace-nowrap shrink-0;
+  }
+  .demo-resources__try-input {
+    @apply flex-1 min-w-0 bg-transparent text-white outline-none border-none;
+    font-family: inherit;
+    font-size: inherit;
+  }
+  .demo-resources__try-input::placeholder {
+    color: #717da3;
+  }
+  .demo-resources__open {
+    @apply inline-flex items-center justify-center gap-2 px-5 ml-auto text-base font-semibold text-white
+           no-underline transition-all duration-200;
+    background: linear-gradient(96deg, #ab83ff 0%, #4177fd 75%);
+    align-self: stretch;
+    min-width: 120px;
+  }
+  .demo-resources__open:hover { filter: brightness(1.08); }
+  .demo-resources__open-arrow {
+    display: inline-flex;
+    align-items: center;
+    transition: transform 0.2s ease;
+  }
+  .demo-resources__open:hover .demo-resources__open-arrow {
+    transform: translateX(3px);
+  }
+  .demo-resources__icon {
+    @apply inline-flex items-center justify-center shrink-0 rounded-md;
+    width: 26px; height: 26px;
+    background: rgba(171, 131, 255, 0.14);
+    color: #cdb3ff;
+  }
+  .demo-resources__row--cta .demo-resources__icon {
+    background: linear-gradient(96deg, #ab83ff 0%, #4177fd 75%);
+    color: #ffffff;
+  }
+  .demo-resources__eyebrow {
+    @apply text-xs font-mono font-semibold uppercase tracking-eyebrow
+           text-brand-neutral-300 shrink-0;
+  }
+  .demo-resources__value {
+    @apply text-base font-medium text-white truncate min-w-0;
+  }
+  .demo-resources__row--cta .demo-resources__value { color: #ffffff; }
+  .demo-resources__doc-link {
+    @apply no-underline border-b border-solid transition-colors;
+    color: #ab83ff;
+    border-color: rgba(171, 131, 255, 0.4);
+  }
+  .demo-resources__doc-link:hover {
+    color: #cdb3ff;
+    border-color: #cdb3ff;
+  }
+  .demo-resources__sep {
+    @apply text-brand-neutral-500 px-2;
+  }
+
+  /* Endpoint chip — METHOD + path pill. Lives inside the code panel header
+     (replaces the "Endpoint config · /path" label). Variant `--inline` makes
+     it tighter so it fits the 1.7rem header bar comfortably. */
+  .endpoint-chip {
+    @apply inline-flex items-stretch rounded-md overflow-hidden;
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(54, 57, 68, 0.6);
+    font-family: 'Source Code Pro', monospace;
+  }
+  .endpoint-chip__method {
+    @apply px-2 py-0.5 text-[0.65rem] font-semibold uppercase tracking-eyebrow text-white;
+    background: linear-gradient(96deg, #ab83ff 0%, #4177fd 75%);
+    display: inline-flex;
+    align-items: center;
+  }
+  .endpoint-chip__path {
+    @apply px-2 py-0.5 text-xs text-brand-neutral-200;
+    display: inline-flex;
+    align-items: center;
+  }
+  .endpoint-chip--inline { border-radius: 4px; }
+  .endpoint-chip--inline .endpoint-chip__method,
+  .endpoint-chip--inline .endpoint-chip__path {
+    @apply py-0;
+    line-height: 1.6;
+  }
+
+
+/* AI Gateway notice — ONE container that morphs between two states:
+   closed = chip (just the handle visible) / open = expanded modal.
+   The element is permanently fixed at the page container's top-right; the
+   transition animates width/height/padding so it visually grows in place. */
+.ai-notice-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: rgba(11, 12, 16, 0.55);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  animation: ai-notice-fade 0.2s ease-out;
+}
+@keyframes ai-notice-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.ai-notice {
+  position: fixed;
+  /* Aligned vertically with the "Back to playground" link and horizontally
+     with the right edge of the page's content rail (matches the container's
+     `lg:px-12` right padding). */
+  top: 7.5rem;
+  right: max(3rem, calc((100vw - 1536px) / 2 + 3rem));
+  z-index: 101;
+  width: 440px;
+  max-width: calc(100vw - 6rem);
+  background: rgba(26, 29, 42, 0.95);
+  border: 1px solid rgba(171, 131, 255, 0.3);
+  border-radius: 8px;
+  color: #e4e9ff;
+  overflow: hidden;
+  box-shadow: 0 4px 12px -4px rgba(0, 0, 0, 0.5);
+  transition:
+    width 0.3s ease-out,
+    box-shadow 0.3s ease-out,
+    background 0.2s ease-out,
+    border-color 0.2s ease-out;
+}
+.ai-notice.is-open {
+  width: 560px;
+  background: #1a1d2a;
+  border-color: rgba(171, 131, 255, 0.45);
+  box-shadow:
+    0 20px 60px -20px rgba(0, 0, 0, 0.7),
+    0 8px 24px -8px rgba(171, 131, 255, 0.25);
+}
+
+/* Handle (always visible, doubles as modal title when open) */
+.ai-notice__handle {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  width: 100%;
+  padding: 0.55rem 0.9rem;
+  background: transparent;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 500;
+  text-align: left;
+  white-space: nowrap;
+  outline: none;
+  transition: padding 0.3s ease-out, font-size 0.3s ease-out;
+}
+.ai-notice__handle:focus-visible {
+  outline: 2px solid rgba(171, 131, 255, 0.6);
+  outline-offset: -2px;
+}
+.ai-notice:not(.is-open) .ai-notice__handle:hover {
+  background: rgba(171, 131, 255, 0.08);
+}
+.ai-notice.is-open .ai-notice__handle {
+  padding: 1.1rem 1.5rem;
+  cursor: default;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #ffffff;
+  border-bottom: 1px solid rgba(54, 57, 68, 0.6);
+}
+.ai-notice__handle-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #ab83ff;
+  flex-shrink: 0;
+  transition: background 0.2s ease-out;
+}
+.ai-notice.is-open .ai-notice__handle-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(171, 131, 255, 0.15);
+}
+.ai-notice__handle-text {
+  flex: 1;
+  min-width: 0;
+}
+.ai-notice__handle-hint {
+  font-size: 0.78rem;
+  font-weight: 400;
+  color: #a2a9be;
+  font-style: italic;
+  flex-shrink: 0;
+  margin-left: 0.5rem;
+  transition: color 0.15s ease;
+}
+.ai-notice:not(.is-open) .ai-notice__handle:hover .ai-notice__handle-hint {
+  color: #cdb3ff;
+}
+.ai-notice__close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  color: #a2a9be;
+  cursor: pointer;
+  transition: color 0.15s ease, background 0.15s ease;
+}
+.ai-notice__close:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+/* Body (collapsed when closed, expanded when open) */
+.ai-notice__body {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  padding: 0;
+  transition:
+    max-height 0.3s ease-out,
+    opacity 0.2s ease-out,
+    padding 0.3s ease-out;
+}
+.ai-notice.is-open .ai-notice__body {
+  max-height: 75vh;
+  opacity: 1;
+  overflow-y: auto;
+  padding: 1.25rem 1.5rem 1.5rem;
+}
+
+.ai-notice__lede {
+  color: #a2a9be;
+  font-size: 1rem;
+  margin: 0 0 1.1rem;
+  line-height: 1.5;
+}
+.ai-notice__section {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(54, 57, 68, 0.6);
+}
+.ai-notice__section:first-of-type {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: none;
+}
+.ai-notice__section h4 {
+  font-size: 0.75rem;
+  font-family: 'Source Code Pro', monospace;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #ab83ff;
+  margin: 0 0 0.55rem;
+}
+.ai-notice__section p {
+  font-size: 1rem;
+  line-height: 1.55;
+  margin: 0 0 0.6rem;
+  color: #e4e9ff;
+}
+.ai-notice__section p:last-child { margin-bottom: 0; }
+.ai-notice__section code {
+  font-family: 'Source Code Pro', monospace;
+  font-size: 0.85em;
+  padding: 0.15em 0.4em;
+  border-radius: 0.3em;
+  background: rgba(171, 131, 255, 0.14);
+  color: #cdb3ff;
+  border: 1px solid rgba(171, 131, 255, 0.22);
+  white-space: nowrap;
+}
+
+/* Terminal-style command block — same look as prose .language-bash. */
+.ai-notice__cmd {
+  position: relative;
+  margin: 0.75rem 0;
+  padding: 2.5rem 1.25rem 1rem;
+  background: #0e1018;
+  border: 1px solid rgba(54, 57, 68, 0.6);
+  border-radius: 8px;
+  font-family: 'Source Code Pro', monospace;
+  font-size: 0.95rem;
+  color: #e4e9ff;
+  overflow-x: auto;
+}
+.ai-notice__cmd::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1.8rem;
+  background:
+    radial-gradient(circle, #ff5f56 4.5px, transparent 5px) 14px center / 18px 100% no-repeat,
+    radial-gradient(circle, #ffbd2e 4.5px, transparent 5px) 32px center / 18px 100% no-repeat,
+    radial-gradient(circle, #27c93f 4.5px, transparent 5px) 50px center / 18px 100% no-repeat,
+    rgba(0, 0, 0, 0.35);
+  border-bottom: 1px solid rgba(54, 57, 68, 0.6);
+  border-radius: 8px 8px 0 0;
+}
+.ai-notice__cmd code {
+  background: transparent;
+  border: none;
+  padding: 0;
+  color: inherit;
+  white-space: pre;
+}
+.ai-notice__cmd code::before {
+  content: "$ ";
+  color: #ab83ff;
+  font-weight: 600;
+  user-select: none;
+  margin-right: 0.25rem;
+}
+
+  /* Section heading shared by category groups on the home grid. */
+  .section-eyebrow {
+    @apply text-xs font-mono uppercase tracking-eyebrow text-brand-neutral-300;
+  }
+
+  /* Pill-style nav tab for the Use cases / Integrations switch. */
+  .nav-tab {
+    @apply px-6 py-2 text-sm font-medium rounded-full transition-colors duration-200 cursor-pointer
+           bg-transparent text-brand-neutral-300 border border-solid border-transparent;
+  }
+  .nav-tab:hover { @apply text-white; }
+  .nav-tab.is-active {
+    @apply text-white;
+    background: linear-gradient(96deg, rgba(171,131,255,0.15) 0%, rgba(65,119,253,0.15) 75%);
+    border-color: rgba(171, 131, 255, 0.4);
+  }
+}

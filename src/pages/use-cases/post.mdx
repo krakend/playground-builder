@@ -1,17 +1,17 @@
 import MdxLayout from '@/components/MdxLayout';
-import URLInputBox from '@/components/URLInputBox'
 
-## Endpoint
-```
-/post
-```
+export const resources = {
+  tryUrl: {
+    endpoint: "http://localhost:8080/post",
+    isStatic: true
+  },
+  docs: [
+    { url: "https://www.krakend.io/docs/endpoints/post/", label: "POST endpoints" }
+  ]
+};
 
-Only the POST method is allowed in this endpoint. KrakenD will return a `405` error when not using the appropiate method.
-
-Opening this link will result on a `405` error:
-
-<URLInputBox endpoint="http://localhost:8080/post" isStatic="true" />
+Only the POST method is allowed in this endpoint. KrakenD will return a `405` error when opened directly via GET (the Try-it button above).
 
 export default function MDXPage({ children }) {
-  return <MdxLayout>{children}</MdxLayout>
+  return <MdxLayout resources={resources}>{children}</MdxLayout>
 }

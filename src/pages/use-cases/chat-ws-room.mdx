@@ -1,26 +1,27 @@
 import MdxLayout from '@/components/MdxLayout';
 import WebSocketChat from '@/components/WebSocketChat'
 
-## Endpoint
-```
-/chat/ws/{room}
-```
+export const resources = {
+  interactive: {
+    url: "http://localhost:8080/interactive-demo/#websocket-chat",
+    label: "WebSocket Chat"
+  },
+  docs: [
+    { url: "https://www.krakend.io/docs/enterprise/websockets/", label: "WebSockets" }
+  ]
+};
 
 ## Chat room using WebSockets
-The endpoint `/chat/ws/{room}` creates a WebSockets connection to the selected `{room}` using Multiplexing.
+The endpoint `/chat/ws/{room}` creates a WebSockets connection to the selected `{room}`. KrakenD upgrades the connection and proxies it to the backend broker; messages flow bidirectionally through the gateway.
 
-Choose a room name and connect the two clients below to create two independent WS connections. You can open multiple times the same page.
-
-See the [WebSockets documentation](https://www.krakend.io/docs/enterprise/websockets/).
+Choose a room name and connect the two clients below to create two independent WS connections. The same dual-client UX is available in the SPA's WebSocket Chat tab.
 
 ### Client 1
 <WebSocketChat/>
 ### Client 2
 <WebSocketChat/>
 
-Try it interactively in the [Playground SPA](http://localhost:3000#websocket-chat).
-
 export default function MDXPage({ children }) {
-  return <MdxLayout>{children}</MdxLayout>
+  return <MdxLayout resources={resources}>{children}</MdxLayout>
 }
 

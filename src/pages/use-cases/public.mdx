@@ -1,21 +1,25 @@
 import MdxLayout from '@/components/MdxLayout';
 
-## About this demo
-- One
-- Two
-- Three
+export const resources = {
+  tryUrl: {
+    endpoint: "http://localhost:8080/public",
+    isStatic: true
+  },
+  interactive: {
+    url: "http://localhost:8080/interactive-demo/#auth-demo/public-private",
+    label: "Public / private auth demo"
+  },
+  docs: [
+    { url: "https://www.krakend.io/docs/enterprise/authorization/", label: "Authorization" }
+  ]
+};
 
-## Endpoint
-```
-/public
-```
+## A public endpoint
 
-A public endpoint with no authentication required.
+This endpoint has **no authentication** declared and is open to any caller. KrakenD forwards the request straight to the backend without any JWT validation, API-key check or policy enforcement.
 
-[http://localhost:8080/public](http://localhost:8080/public)
-
-Try it interactively in the [Playground SPA](http://localhost:3000#auth-demo/public-private).
+Public endpoints are the right choice for content that should be reachable without credentials — health checks, landing pages, login flows or any anonymous browsing path. Pair them in the same gateway with the [`/private/*` endpoints](/demo/use-cases/private-moderate) to compare what KrakenD enforces when authentication IS declared.
 
 export default function MDXPage({ children }) {
-  return <MdxLayout>{children}</MdxLayout>
+  return <MdxLayout resources={resources}>{children}</MdxLayout>
 }

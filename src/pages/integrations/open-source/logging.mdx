@@ -1,13 +1,18 @@
 import IntegrationLayout from '@/components/IntegrationLayout';
 
+export const resources = {
+  interactive: {
+    url: "http://localhost:5601/app/home#/",
+    label: "Open Kibana"
+  },
+  docs: [
+    { url: "https://www.krakend.io/docs/logging/elk-integration/", label: "ELK Integration for Logging" }
+  ]
+};
+
 ## About this demo
 Kibana stores KrakenD logs and allows analysis.
 
-## Endpoint
-```
-http://localhost:5601/app/home#/
-```
-
 export default function MDXPage({ children }) {
-  return <IntegrationLayout>{children}</IntegrationLayout>
+  return <IntegrationLayout resources={resources}>{children}</IntegrationLayout>
 }

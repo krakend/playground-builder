@@ -1,11 +1,20 @@
 import IntegrationLayout from '@/components/IntegrationLayout';
 
+export const resources = {
+  interactive: {
+    url: "http://localhost:16686/search",
+    label: "Open Jaeger"
+  },
+  docs: [
+    { url: "https://www.krakend.io/docs/telemetry/jaeger/", label: "Jaeger telemetry" },
+    { url: "https://www.krakend.io/docs/telemetry/opentelemetry/", label: "OpenTelemetry" }
+  ]
+};
+
 ## About this demo
 Jaeger collects traces and shows the complete funnel from user request to the impact in the backend.
 
-Demo Access: [http://localhost:16686/search](http://localhost:16686/search)
-
-**Call a few endpoints to record activity first**
+**Call a few endpoints to record activity first.**
 
 ## Configuration
 
@@ -31,11 +40,6 @@ Explore the `krakend.json` file and find the `telemetry/opentelemetry` block. Yo
 }
 ```
 
-## Documentation
-
-- [Jaeger Telemetry Integration on KrakenD](https://www.krakend.io/docs/telemetry/jaeger/)
-- [OpenTelemetry](https://www.krakend.io/docs/telemetry/opentelemetry/)
-
 export default function MDXPage({ children }) {
-  return <IntegrationLayout>{children}</IntegrationLayout>
+  return <IntegrationLayout resources={resources}>{children}</IntegrationLayout>
 }

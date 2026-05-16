@@ -1,14 +1,19 @@
 import IntegrationLayout from '@/components/IntegrationLayout';
 
+export const resources = {
+  interactive: {
+    url: "http://localhost:4000",
+    label: "Open Grafana"
+  },
+  docs: [
+    { url: "https://www.krakend.io/docs/telemetry/grafana/", label: "Telemetry & Monitoring with Grafana" }
+  ]
+};
+
 ## About this demo
 Grafana Monitoring shows the usage of KrakenD and reveals low-level metrics.
 Use `admin` as temporary user and password. And then go to `Dashboards` > `Manage` to see the KrakenD dashboard.
 
-## Endpoint
-```
-http://localhost:4000
-```
-
 export default function MDXPage({ children }) {
-  return <IntegrationLayout>{children}</IntegrationLayout>
+  return <IntegrationLayout resources={resources}>{children}</IntegrationLayout>
 }

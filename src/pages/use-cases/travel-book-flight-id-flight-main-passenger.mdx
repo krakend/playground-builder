@@ -1,9 +1,10 @@
 import MdxLayout from '@/components/MdxLayout';
 
-## Endpoint
-```
-/travel_book_flight/{id_flight}/{main_passenger}
-```
+export const resources = {
+  docs: [
+    { url: "https://www.krakend.io/docs/enterprise/backends/grpc/", label: "gRPC to REST" }
+  ]
+};
 
 ## gRPC parameter mapping
 
@@ -12,8 +13,6 @@ The `/travel_book_flight/{id_flight}/{main_passenger}` shows how to map paramete
 
 This use case is similar to the [`/travel` endpoint](/demo/use-cases/travel).
 
-See the [gRPC to REST documentation](https://www.krakend.io/docs/enterprise/backends/grpc/)
-
 export default function MDXPage({ children }) {
-  return <MdxLayout>{children}</MdxLayout>
+  return <MdxLayout resources={resources}>{children}</MdxLayout>
 }

@@ -1,11 +1,19 @@
 import MdxLayout from '@/components/MdxLayout';
 
-## Endpoint
-```
-/prompt-guardrail-deterministic
-```
+export const resources = {
+  aiFeature: true,
+  interactive: {
+    url: "http://localhost:8080/interactive-demo/#ai-gateway/guardrail-deterministic",
+    label: "AI Gateway · Deterministic guardrail"
+  },
+  docs: [
+    { url: "https://www.krakend.io/docs/endpoints/json-schema/", label: "JSON Schema validation" },
+    { url: "https://www.krakend.io/docs/enterprise/ai-gateway/governance/", label: "AI Governance" }
+  ]
+};
 
 ## Deterministic Prompt Guardrail
+
 
 Block sensitive data from reaching your LLM using **regex pattern validation** at the gateway. Credit card numbers, passwords, and API keys are caught and rejected before consuming any AI tokens.
 
@@ -18,13 +26,16 @@ KrakenD's **JSON Schema validator** inspects the request body before forwarding 
   "properties": {
     "contents": {
       "allOf": [
-        { "not": { "pattern": "\\b\\d{4}[\\s-]?\\d{4}[\\s-]?\\d{4}[\\s-]?\\d{4}\\b" } },
+        { "not": { "pattern": "\\b\\d{4}[\\s\\-]?\\d{4}[\\s\\-]?\\d{4}[\\s\\-]?\\d{4}\\b" } },
         { "not": { "pattern": "(?i)password\\s*(is)?\\s*[:=]" } },
         { "not": { "pattern": "(?i)secret\\s*(is)?\\s*[:=]" } },
-        { "not": { "pattern": "(?i)api[_\\s-]?key\\s*[:=]" } }
-      ]
+        { "not": { "pattern": "(?i)api[_\\s\\-]?key\\s*[:=]" } }
+      ],
+      "type": "string"
     }
-  }
+  },
+  "required": ["contents"],
+  "type": "object"
 }
 ```
 
@@ -38,7 +49,7 @@ KrakenD's **JSON Schema validator** inspects the request body before forwarding 
 
 ### Try it
 
-Try it interactively in the [Playground SPA](http://localhost:3000#ai-gateway/guardrail-deterministic) — use the example buttons to test clean and blocked prompts.
+Run from the CLI to test clean and blocked prompts:
 
 ```bash
 # Clean prompt → passes through to LLM
@@ -60,9 +71,6 @@ Prevent accidental data leaks to AI providers with zero latency overhead. Patter
 
 > **Note:** The regex patterns shown here are illustrative. KrakenD's JSON Schema validator supports the full JSON Schema specification — you can combine patterns, enforce field types, set length limits, and build validation rules as complex as your compliance requirements demand.
 
-See the [JSON Schema Validation documentation](https://www.krakend.io/docs/endpoints/json-schema/) and [AI Governance](https://www.krakend.io/docs/enterprise/ai-gateway/governance/)
-
-
 export default function MDXPage({ children }) {
-  return <MdxLayout>{children}</MdxLayout>
+  return <MdxLayout resources={resources}>{children}</MdxLayout>
 }

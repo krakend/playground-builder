@@ -1,0 +1,329 @@
+@layer components {
+  /* Code panel — used by MdxLayout to display the endpoint config.
+     Matches the dark surface + lavender-accent aesthetic from the SPA / slides. */
+  .code-panel {
+    @apply rounded-xl overflow-hidden border border-solid;
+    background: #1a1d2a;
+    border-color: rgba(54, 57, 68, 0.6);
+    box-shadow:
+      0 1px 2px rgba(0, 0, 0, 0.4),
+      0 8px 24px -8px rgba(11, 12, 16, 0.6);
+  }
+  .code-panel__header {
+    @apply flex items-center justify-between px-4 py-2 border-b border-solid;
+    border-color: rgba(54, 57, 68, 0.6);
+    background: rgba(0, 0, 0, 0.25);
+  }
+  .code-panel__label {
+    @apply text-xs font-mono uppercase tracking-eyebrow;
+    background-image: linear-gradient(96deg, #ab83ff 0%, #4177fd 75%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 600;
+  }
+  .code-panel__copy {
+    @apply inline-flex items-center gap-1.5 text-xs text-brand-neutral-300
+           cursor-pointer transition-colors;
+    background: transparent;
+    border: none;
+    padding: 4px 8px;
+    border-radius: 6px;
+  }
+  .code-panel__copy:hover {
+    color: #ffffff;
+    background: rgba(171, 131, 255, 0.08);
+  }
+  .code-panel__copy.is-copied { color: #31ee8b; }
+
+  /* The body is what wraps Prism's <pre>. Custom scrollbar + tighter padding. */
+  .code-panel__body {
+    @apply overflow-auto;
+    max-height: 70vh;
+  }
+  .code-panel__body pre[class*="language-"] {
+    margin: 0;
+    padding: 1rem 1.25rem;
+    background: transparent;
+    border-radius: 0;
+    font-family: 'Source Code Pro', monospace;
+    font-size: 0.8rem;
+    line-height: 1.55;
+    /* Word-wrap so long JSON values stay inside the column. The line-number
+       gutter will drift slightly on wrapped lines — accepted trade-off. */
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+  .code-panel__body code[class*="language-"] {
+    font-family: 'Source Code Pro', monospace;
+    text-shadow: none;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  /* Line numbers — tint Prism plugin output. The plugin injects the gutter
+     inside <code> with negative `left`; both <code> and <pre> need
+     overflow:visible so the gutter isn't clipped. Scroll lives on the
+     panel body wrapper. */
+  .code-panel__body pre.line-numbers.line-numbers {
+    overflow: visible;
+    padding-left: 3.8em;
+  }
+  .code-panel__body pre.line-numbers > code {
+    overflow: visible;
+  }
+  .code-panel__body pre.line-numbers .line-numbers-rows {
+    text-align: right;
+    padding-right: 0.6em;
+    border-right: 1px solid rgba(54, 57, 68, 0.6);
+  }
+  .code-panel__body pre.line-numbers .line-numbers-rows > span::before {
+    color: rgba(171, 131, 255, 0.45) !important;
+    font-weight: 500;
+  }
+
+  /* WebKit scrollbar — quiet but visible. */
+  .code-panel__body::-webkit-scrollbar {
+    width: 8px; height: 8px;
+  }
+  .code-panel__body::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .code-panel__body::-webkit-scrollbar-thumb {
+    background: rgba(171, 131, 255, 0.18);
+    border-radius: 4px;
+  }
+  .code-panel__body::-webkit-scrollbar-thumb:hover {
+    background: rgba(171, 131, 255, 0.35);
+  }
+
+  /* Token re-tint on top of prism-atom-dark to align with brand palette.
+     Applied to both the dedicated code panel and any prose <pre>. */
+  .code-panel .token.property,
+  .code-panel .token.tag,
+  .code-panel .token.constant,
+  .code-panel .token.symbol,
+  .code-panel .token.deleted,
+  .prose--mdx pre .token.property,
+  .prose--mdx pre .token.tag,
+  .prose--mdx pre .token.constant,
+  .prose--mdx pre .token.symbol,
+  .prose--mdx pre .token.deleted {
+    color: #ab83ff;
+  }
+  .code-panel .token.string,
+  .code-panel .token.char,
+  .code-panel .token.attr-value,
+  .code-panel .token.builtin,
+  .code-panel .token.inserted,
+  .prose--mdx pre .token.string,
+  .prose--mdx pre .token.char,
+  .prose--mdx pre .token.attr-value,
+  .prose--mdx pre .token.builtin,
+  .prose--mdx pre .token.inserted {
+    color: #31ee8b;
+  }
+  .code-panel .token.number,
+  .code-panel .token.boolean,
+  .prose--mdx pre .token.number,
+  .prose--mdx pre .token.boolean {
+    color: #4177fd;
+  }
+  .code-panel .token.punctuation,
+  .prose--mdx pre .token.punctuation {
+    color: #717da3;
+  }
+  .code-panel .token.operator,
+  .code-panel .token.entity,
+  .code-panel .token.url,
+  .prose--mdx pre .token.operator,
+  .prose--mdx pre .token.entity,
+  .prose--mdx pre .token.url {
+    color: #c9d3ee;
+  }
+  .code-panel .token.comment,
+  .code-panel .token.prolog,
+  .code-panel .token.doctype,
+  .code-panel .token.cdata,
+  .prose--mdx pre .token.comment,
+  .prose--mdx pre .token.prolog,
+  .prose--mdx pre .token.doctype,
+  .prose--mdx pre .token.cdata {
+    color: #717da3;
+    font-style: italic;
+  }
+
+  /* URL input box — address-bar-style preview + open-in-new-tab action.
+     Used inside MDX use-case pages to let the user try the gateway live. */
+  .url-input-box {
+    @apply flex items-stretch rounded-xl overflow-hidden cursor-text
+           transition-colors duration-200;
+    background: #1a1d2a;
+    border: 1px solid rgba(54, 57, 68, 0.6);
+  }
+  .url-input-box:focus-within,
+  .url-input-box:hover {
+    border-color: rgba(171, 131, 255, 0.55);
+  }
+  .url-input-box__scheme {
+    @apply flex items-center px-4 text-sm font-mono font-semibold
+           tracking-eyebrow text-brand-neutral-300;
+    background: rgba(0, 0, 0, 0.25);
+    border-right: 1px solid rgba(54, 57, 68, 0.6);
+    letter-spacing: 0.12em;
+  }
+  .url-input-box__field {
+    @apply flex flex-1 items-center min-w-0 px-4 gap-0 py-3;
+    font-family: 'Source Code Pro', monospace;
+    font-size: 0.95rem;
+  }
+  .url-input-box__base {
+    @apply text-brand-neutral-300 whitespace-nowrap shrink-0;
+  }
+  .url-input-box__input {
+    @apply flex-1 min-w-0 bg-transparent text-white outline-none border-none;
+    font-family: inherit;
+    font-size: inherit;
+  }
+  .url-input-box__input::placeholder {
+    color: #717da3;
+  }
+  .url-input-box__view {
+    @apply inline-flex items-center gap-1.5 px-5 text-sm font-semibold text-white
+           no-underline transition-all duration-200;
+    background: linear-gradient(96deg, #ab83ff 0%, #4177fd 75%);
+  }
+  .url-input-box__view:hover { filter: brightness(1.08); }
+
+  /* WebSocket chat client — connect form + message log + compose. */
+  .ws-chat {
+    @apply flex flex-col gap-3 p-5 rounded-xl;
+    background: #1a1d2a;
+    border: 1px solid rgba(54, 57, 68, 0.6);
+  }
+  .ws-chat__row {
+    @apply flex flex-col sm:flex-row sm:items-center gap-3;
+  }
+  .ws-chat__input-group {
+    @apply flex flex-1 items-center min-w-0 rounded-lg overflow-hidden
+           transition-colors duration-200;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(54, 57, 68, 0.6);
+    font-family: 'Source Code Pro', monospace;
+    font-size: 0.85rem;
+  }
+  .ws-chat__input-group:focus-within { border-color: rgba(171, 131, 255, 0.55); }
+  .ws-chat__prefix {
+    @apply px-3 py-2 text-brand-neutral-300 whitespace-nowrap shrink-0;
+    border-right: 1px solid rgba(54, 57, 68, 0.6);
+  }
+  .ws-chat__input {
+    @apply flex-1 min-w-0 bg-transparent text-white px-3 py-2 outline-none border-none;
+    font-family: inherit; font-size: inherit;
+  }
+  .ws-chat__input::placeholder { color: #717da3; }
+
+  .ws-chat__status {
+    @apply text-xs flex items-center gap-2;
+  }
+  .ws-chat__status--error { color: #ff4545; }
+  .ws-chat__status--ok    { color: #31ee8b; }
+  .ws-chat__dot {
+    @apply inline-block rounded-full;
+    width: 8px; height: 8px;
+    background: #31ee8b;
+    box-shadow: 0 0 8px rgba(49, 238, 139, 0.6);
+  }
+
+  .ws-chat__messages {
+    @apply h-64 overflow-y-auto p-3 rounded-lg flex flex-col gap-2;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(54, 57, 68, 0.6);
+  }
+  .ws-chat__messages::-webkit-scrollbar { width: 6px; }
+  .ws-chat__messages::-webkit-scrollbar-thumb {
+    background: rgba(171, 131, 255, 0.18); border-radius: 3px;
+  }
+  .ws-chat__empty {
+    @apply text-sm text-brand-neutral-300 italic m-auto;
+  }
+  .ws-chat__message {
+    @apply px-3 py-2 rounded-md text-sm text-white;
+    background: rgba(171, 131, 255, 0.08);
+    border: 1px solid rgba(171, 131, 255, 0.18);
+    font-family: 'Source Code Pro', monospace;
+    word-break: break-word;
+  }
+
+  .ws-chat__compose {
+    @apply flex items-center gap-2;
+  }
+  .ws-chat__compose-input {
+    @apply flex-1 min-w-0 px-3 py-2 rounded-lg text-white outline-none transition-colors;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(54, 57, 68, 0.6);
+    font-size: 0.9rem;
+  }
+  .ws-chat__compose-input:focus { border-color: rgba(171, 131, 255, 0.55); }
+  .ws-chat__compose-input::placeholder { color: #717da3; }
+}
+
+/* Copy button injected on every prose <pre> via mdx-components. Reuses the
+   .code-panel__copy styles for full parity with the dedicated config panel;
+   only positioning is bespoke. For terminal blocks the button sits inside
+   the macOS header bar (right edge); for regular code blocks it floats on
+   the top-right of the pre. */
+.prose-pre-wrapper { position: relative; }
+.prose-pre-copy {
+  position: absolute;
+  top: 0.35rem;
+  right: 0.5rem;
+  z-index: 2;
+}
+
+/* Terminal-style pre blocks. Activated when the markdown code fence uses
+   `bash`, `shell`, `sh`, or `console` as language tag. */
+.prose--mdx pre.language-bash,
+.prose--mdx pre.language-shell,
+.prose--mdx pre.language-sh,
+.prose--mdx pre.language-console {
+  position: relative;
+  padding-top: 2.4rem;
+  padding-left: 1.25rem;
+  background: #1a1d2a;
+  border: 1px solid rgba(54, 57, 68, 0.6);
+}
+/* Header bar with three traffic-light dots — drawn purely via gradients. */
+.prose--mdx pre.language-bash::before,
+.prose--mdx pre.language-shell::before,
+.prose--mdx pre.language-sh::before,
+.prose--mdx pre.language-console::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1.7rem;
+  background:
+    radial-gradient(circle, #ff5f56 4.5px, transparent 5px) 14px center / 18px 100% no-repeat,
+    radial-gradient(circle, #ffbd2e 4.5px, transparent 5px) 32px center / 18px 100% no-repeat,
+    radial-gradient(circle, #27c93f 4.5px, transparent 5px) 50px center / 18px 100% no-repeat,
+    rgba(0, 0, 0, 0.35);
+  border-bottom: 1px solid rgba(54, 57, 68, 0.6);
+}
+/* "$" prompt prefix on the actual command line. */
+.prose--mdx pre.language-bash code::before,
+.prose--mdx pre.language-shell code::before,
+.prose--mdx pre.language-sh code::before,
+.prose--mdx pre.language-console code::before {
+  content: "$ ";
+  color: #ab83ff;
+  font-weight: 600;
+  user-select: none;
+  margin-right: 0.25rem;
+}
+/* Command text stays bright white — override the prose code color. */
+.prose--mdx pre.language-bash code,
+.prose--mdx pre.language-shell code,
+.prose--mdx pre.language-sh code,
+.prose--mdx pre.language-console code {
+  color: #e4e9ff;
+}

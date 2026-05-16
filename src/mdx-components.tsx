@@ -1,56 +1,56 @@
+import DemoResources from "@/components/DemoResources";
 import CopyIcon from "@/image/icons/copy.svg";
 import type { MDXComponents } from "mdx/types";
 import { useState } from "react";
 
 /**
- * A wrapper component for rendering preformatted code blocks with a copy button to copy the code content to the clipboard.
- *
- * @param children The code block content to be displayed inside `<pre>`.
- * @param props Additional properties passed to the `<pre>` element.
- * @returns A styled `<pre>` element with a copy button.
+ * Wraps every prose <pre> with a copy button that mirrors the look and
+ * feedback of the dedicated config code panel: icon + "Copy" label that
+ * flips to a checkmark + "Copied" in brand green for ~1.4s.
  */
 const Pre = ({ children, ...props }) => {
   const [copied, setCopied] = useState(false);
 
-  /**
-   * Copies the text content of a child component to the clipboard.
-   * Sets a temporary copied state for user feedback.
-   */
-  const copyCodeHandler = () => {
+  const handleCopy = () => {
+    const text =
+      typeof children?.props?.children === "string"
+        ? children.props.children
+        : "";
     navigator.clipboard
-      .writeText(children.props.children)
+      .writeText(text)
       .then(() => {
         setCopied(true);
-        setTimeout(() => setCopied(false), 1000);
+        setTimeout(() => setCopied(false), 1400);
       })
       .catch((err) => console.error("Failed to copy!", err));
   };
 
   return (
-    <div className="relative">
+    <div className="prose-pre-wrapper">
       <pre {...props}>{children}</pre>
       <button
-        onClick={copyCodeHandler}
-        className={`absolute right-2 top-2 ${
-          copied ? "text-green-500" : "text-brand-neutral-200"
-        }`}
+        type="button"
+        onClick={handleCopy}
+        aria-label={copied ? "Copied" : "Copy code"}
+        className={`code-panel__copy prose-pre-copy ${copied ? "is-copied" : ""}`}
       >
-        <CopyIcon width={20} height={20} />
+        {copied ? (
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="20 6 9 17 4 12" />
+          </svg>
+        ) : (
+          <CopyIcon width={14} height={14} />
+        )}
+        <span>{copied ? "Copied" : "Copy"}</span>
       </button>
     </div>
   );
 };
 
-/**
- * Customizes the default MDX components by providing a custom component.
- * This function allows for extending or overriding MDX components dynamically.
- *
- * @param components The existing MDX components to extend.
- * @returns A new object with the custom `<pre>` component and any provided components.
- */
 export function useMDXComponents(components: MDXComponents): MDXComponents {
   return {
     pre: Pre,
+    DemoResources,
     ...components,
   };
 }

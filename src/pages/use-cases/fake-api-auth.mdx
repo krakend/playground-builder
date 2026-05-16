@@ -1,34 +1,36 @@
 import MdxLayout from '@/components/MdxLayout';
 
-## Endpoint
-```
-/fake-api-auth/*
-```
+export const resources = {
+  interactive: {
+    url: "http://localhost:8080/interactive-demo/#auth-demo/basic-auth",
+    label: "Basic Auth demo"
+  },
+  docs: [
+    { url: "https://www.krakend.io/docs/enterprise/authentication/basic-authentication/", label: "Basic Authentication" }
+  ]
+};
 
 ## Wildcard routes with Basic Auth
 This is the same [`fake-api` wildcard functionality](/demo/use-cases/fake-api) that calls our open fake backend, but before trying to retrieve its contents it will demand the user to be authenticated.
 
 Notice that the only data the endpoint needs to require authentication is one-line:
-```
+```json
 "auth/basic": {}
 ```
 
-The credentials and rest of the configuration is taken from the root of the `krakend.json` configuration. See the [Basic Authentication documentation](https://www.krakend.io/docs/enterprise/authentication/basic-authentication/)
-
+The credentials and rest of the configuration is taken from the root of the `krakend.json` configuration.
 
 For the test, you can call any file under the `data` folder of the project and use `admin` as user and `admin` as password:
 
-```
+```bash
 curl -iG 'http://admin:admin@localhost:8080/fake-api-auth/articles.json'
 ```
 
 And for the unauthorized version:
-```
+```bash
 curl -iG 'http://localhost:8080/fake-api-auth/articles.json'
 ```
 
-Try it interactively in the [Playground SPA](http://localhost:3000#auth-demo/basic-auth).
-
 export default function MDXPage({ children }) {
-  return <MdxLayout>{children}</MdxLayout>
+  return <MdxLayout resources={resources}>{children}</MdxLayout>
 }

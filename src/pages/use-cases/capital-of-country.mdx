@@ -1,10 +1,14 @@
 import MdxLayout from '@/components/MdxLayout';
-import URLInputBox from '@/components/URLInputBox'
 
-## Endpoint
-```http
-/capital-of/{country}
-```
+export const resources = {
+  tryUrl: {
+    endpoint: "http://localhost:8080/capital-of/",
+    placeholder: "two-letter country code (e.g. FR)"
+  },
+  docs: [
+    { url: "https://www.krakend.io/docs/enterprise/backends/soap/", label: "SOAP backends" }
+  ]
+};
 
 ## SOAP to REST
 This use case demonstrates exposing a SOAP backend as a regular REST API. API users don't realize they are consuming a SOAP service.
@@ -30,12 +34,6 @@ The gateway replaces the variable `{{ .req_params.Country }}` with the endpoint 
 ## Response transformation
 As no `output_encoding` exists, the gateway will default to its JSON response, which is transformed on the fly. In addition, the `target` attribute selects the `CapitalCityResponse` from the XML, and then with `mapping`, it renames it to `capital`. Because XML has extra attributes we don't want to have in the response, like'- m`, we ban them from the response.
 
-Test this endpoint with the two-letter code of a country:
-
-<URLInputBox endpoint="http://localhost:8080/capital-of/" placeholder="FR" />
-
-See the [SOAP documentation](https://www.krakend.io/docs/enterprise/backends/soap/) for more details.
-
 export default function MDXPage({ children }) {
-  return <MdxLayout>{children}</MdxLayout>
+  return <MdxLayout resources={resources}>{children}</MdxLayout>
 }

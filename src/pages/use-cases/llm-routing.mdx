@@ -1,11 +1,19 @@
 import MdxLayout from '@/components/MdxLayout';
 
-## Endpoint
-```
-/llm-routing
-```
+export const resources = {
+  aiFeature: true,
+  interactive: {
+    url: "http://localhost:8080/interactive-demo/#ai-gateway/llm-routing",
+    label: "AI Gateway · LLM Routing"
+  },
+  docs: [
+    { url: "https://www.krakend.io/docs/enterprise/ai-gateway/llm-routing/", label: "LLM Routing" },
+    { url: "https://www.krakend.io/docs/enterprise/backends/conditional/", label: "Conditional Routing" }
+  ]
+};
 
 ## Multi-Provider LLM Routing
+
 
 Route AI requests to **three different LLM providers** from a single endpoint — no application code changes needed. KrakenD inspects the `X-Model` header and forwards the request to the right provider.
 
@@ -15,8 +23,8 @@ The gateway uses **conditional backends** with a header-based strategy. Each bac
 
 ```json
 "backend/conditional": {
-  "strategy": "header",
   "name": "X-Model",
+  "strategy": "header",
   "value": "gemini"
 }
 ```
@@ -31,7 +39,7 @@ When no header matches, a **fallback** backend handles the request — in this c
 
 ### Try it
 
-Try it interactively in the [Playground SPA](http://localhost:3000#ai-gateway/llm-routing), or via curl:
+Try it interactively in the [Interactive Demos](http://localhost:8080/interactive-demo/#ai-gateway/llm-routing), or via curl:
 
 ```bash
 # Route to Gemini
@@ -60,5 +68,5 @@ See the [LLM Routing documentation](https://www.krakend.io/docs/enterprise/ai-ga
 
 
 export default function MDXPage({ children }) {
-  return <MdxLayout>{children}</MdxLayout>
+  return <MdxLayout resources={resources}>{children}</MdxLayout>
 }

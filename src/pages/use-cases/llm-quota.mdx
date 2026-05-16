@@ -1,11 +1,19 @@
 import MdxLayout from '@/components/MdxLayout';
 
-## Endpoint
-```
-/llm-quota
-```
+export const resources = {
+  aiFeature: true,
+  interactive: {
+    url: "http://localhost:8080/interactive-demo/#ai-gateway/llm-quota",
+    label: "AI Gateway · Token Quota"
+  },
+  docs: [
+    { url: "https://www.krakend.io/docs/enterprise/governance/quota/", label: "Quota" },
+    { url: "https://www.krakend.io/docs/enterprise/ai-gateway/budget-control/", label: "AI Budget Control" }
+  ]
+};
 
 ## Token Quota Management
+
 
 Control AI spend with **per-user token budgets** enforced at the gateway level. KrakenD tracks token consumption in Redis and rejects requests when the budget is exhausted.
 
@@ -20,9 +28,9 @@ Three components work together:
 ```json
 "governance/quota": {
   "quota_name": "llm_tokens",
-  "weight_key": "credits_consumed",
-  "weight_strategy": "body",
-  "tier_key": "X-Role"
+  "tier_key": "X-Role",
+  "weight_key": "usage",
+  "weight_strategy": "body"
 }
 ```
 
@@ -33,7 +41,7 @@ Three components work together:
 
 ### Try it
 
-Try it interactively in the [Playground SPA](http://localhost:3000#ai-gateway/llm-quota) — make several requests and watch the quota decrease.
+Run from the CLI and watch the quota decrease:
 
 ```bash
 # Login and make requests until quota runs out
@@ -57,9 +65,6 @@ Prevent runaway AI costs without writing budget logic in your application. Defin
 
 > **Note:** This demo uses two tiers based on JWT roles, but the quota system supports unlimited tiers, multiple time windows (per hour, day, month), and different identification strategies (header, IP, JWT claim). Tailor it to your pricing model.
 
-See the [Quota documentation](https://www.krakend.io/docs/enterprise/governance/quota/) and [AI Budget Control](https://www.krakend.io/docs/enterprise/ai-gateway/budget-control/)
-
-
 export default function MDXPage({ children }) {
-  return <MdxLayout>{children}</MdxLayout>
+  return <MdxLayout resources={resources}>{children}</MdxLayout>
 }

@@ -1,17 +1,21 @@
 import MdxLayout from '@/components/MdxLayout';
 
-## Endpoint
-```
-/token
-```
+export const resources = {
+  tryUrl: {
+    endpoint: "http://localhost:8080/token",
+    isStatic: true
+  },
+  docs: [
+    { url: "https://www.krakend.io/docs/authorization/jwt-signing/", label: "JWT Signing" }
+  ]
+};
 
-This use case simulates when you have a monolithic service or similar, that is capable of generating a JSON payload (like a token) but is not able to cryptographically sign it. The signing component helps you to transition from a classic session workflow to a JWT workflow.
+## Backend-issued payload, gateway-signed token
 
-In this example we have a simulated token payload from a backend, that the `auth/signer` component is going to take and sign cryptographically using an algorithm HS256. The resulting token can be used to access protected endpoints that require the same key, like the [`/private/custom/` endpoint](/demo/use-cases/private-custom)
+This use case simulates a monolithic backend that can produce a JSON payload (e.g. a session-like response) but **doesn't know how to sign JWTs**. The `auth/signer` component picks the payload up and signs it cryptographically with HS256 before returning it to the caller.
 
-Request a token here:
-[http://localhost:8080/token](http://localhost:8080/token)
+It's the bridge between a classic session workflow and a JWT-based one — your backends stay as-is, the gateway turns their output into proper signed tokens. The resulting token works with any endpoint that validates it with the same key, like [`/private/custom`](/demo/use-cases/private-custom).
 
 export default function MDXPage({ children }) {
-  return <MdxLayout>{children}</MdxLayout>
+  return <MdxLayout resources={resources}>{children}</MdxLayout>
 }

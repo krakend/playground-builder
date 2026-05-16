@@ -1,11 +1,22 @@
 import IntegrationLayout from '@/components/IntegrationLayout';
 
+export const resources = {
+  interactive: {
+    url: "http://localhost:8080/interactive-demo/#auth-demo/public-private",
+    label: "Authentication demo"
+  },
+  docs: [
+    { url: "https://www.krakend.io/docs/authorization/", label: "Authorization" },
+    { url: "https://www.krakend.io/docs/authorization/jwt-validation/", label: "JWT validation" }
+  ]
+};
+
 ## About this demo
 Many identity providers work with KrakenD as it uses standard JWT validation. In this demo, we have included a ready-to-go example with Keycloak.
 
 The Keycloak container acts as an Identity Provider (IdP) to demonstrate the ability to properly validate JWT tokens issued by it.
 
-We've created a [SPA demo page](http://localhost:3000) where you can see and try the authentication flow.  There are two pre-generated users with different roles (`user` / `pass`):
+We've created an [Interactive Demos page](http://localhost:8080/interactive-demo/#auth-demo/public-private) where you can see and try the authentication flow.  There are two pre-generated users with different roles (`user` / `pass`):
 
 - `moderator` / `moderator`
 - `reader` / `reader`
@@ -16,11 +27,11 @@ If you need to create new roles, users or configurations in the Keycloak instanc
 
 ⚠️ All the realm configuration changes done using the administration dashboard won't be persisted on container restart. If you need to export the realm config for later usage, you can overwrite the realms/ contents by spawning the following command (make sure the container is up and running):
 
-```
+```bash
 make save-keycloak-config
 ```
 
 
 export default function MDXPage({ children }) {
-  return <IntegrationLayout>{children}</IntegrationLayout>
+  return <IntegrationLayout resources={resources}>{children}</IntegrationLayout>
 }

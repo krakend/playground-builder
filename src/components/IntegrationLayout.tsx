@@ -1,10 +1,17 @@
 import integrationData from "@/data/integrations.json";
 import Image from "next/image";
 import { useRouter } from "next/router";
+import Prism from "prismjs";
+import { useEffect } from "react";
 import CtaRouteBack from "./Cta/CtaRouteBack";
 import DemoCta from "./Cta/DemoCta";
+import DemoResources from "./DemoResources";
 import Layout from "./Layout";
 import SEO from "./SEO";
+
+require("prismjs/components/prism-json");
+require("prismjs/components/prism-bash");
+require("prismjs/components/prism-yaml");
 
 interface IntegrationHeaderProps {
   name: string;
@@ -17,20 +24,20 @@ const IntegrationHeader: React.FC<IntegrationHeaderProps> = ({
   title,
   iconUrl,
 }) => (
-  <div className="mt-10">
-    <div className="flex items-center gap-3 mb-2">
+  <div className="mt-8">
+    <div className="flex items-center gap-3 mb-3">
       {iconUrl && (
-        <Image
-          src={iconUrl}
-          alt={`${name} logo`}
-          width={30}
-          height={30}
-          className="object-contain"
-        />
+        <div className="p-1 size-10 rounded-md bg-brand-blue-800 flex items-center justify-center">
+          <Image
+            src={iconUrl}
+            alt={`${name} logo`}
+            width={28}
+            height={28}
+            className="object-contain"
+          />
+        </div>
       )}
-      <span className="uppercase tracking-wider text-sm text-brand-neutral-300">
-        {name}
-      </span>
+      <span className="section-eyebrow">{name}</span>
     </div>
     <h1 className="heading--h2 mb-10 text-white">{title}</h1>
   </div>
@@ -51,7 +58,18 @@ const IntegrationContent: React.FC<{ children: React.ReactNode }> = ({
  * @param {ReactNode} props.children - The content to be displayed.
  * @returns {JSX.Element} The IntegrationLayout component.
  */
-const IntegrationLayout = ({ children }) => {
+type ResourcesProp = {
+  interactive?: { url: string; label: string };
+  docs?: { url: string; label: string }[];
+};
+
+const IntegrationLayout = ({
+  children,
+  resources,
+}: {
+  children: React.ReactNode;
+  resources?: ResourcesProp;
+}) => {
   const router = useRouter();
   const pathname = router.asPath.replace(/\/$/, "");
 
@@ -62,6 +80,10 @@ const IntegrationLayout = ({ children }) => {
   const integration = integrationData.integrations.find(
     (integration) => integration.slug === slug
   );
+
+  useEffect(() => {
+    Prism.highlightAll();
+  }, []);
 
   if (!integration) {
     return <div>Integration not found</div>;
@@ -82,6 +104,7 @@ const IntegrationLayout = ({ children }) => {
             title={integration.title}
             iconUrl={integration.iconUrl}
           />
+          {resources && <DemoResources {...resources} />}
           <IntegrationContent>{children}</IntegrationContent>
         </div>
       </section>

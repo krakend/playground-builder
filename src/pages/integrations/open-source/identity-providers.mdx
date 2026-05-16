@@ -1,8 +1,19 @@
 import IntegrationLayout from '@/components/IntegrationLayout';
 
+export const resources = {
+  docs: [
+    { url: "https://www.krakend.io/docs/authorization/jwt-validation/", label: "JWT Validation" }
+  ]
+};
+
 ## About this demo
-Keycloak and many other identity providers can be integrated with KrakenD.
+
+KrakenD validates JWT tokens issued by any standards-compliant identity provider — Keycloak, Auth0, Okta, Cognito, Google, Azure AD, your own self-hosted IdP. The gateway pulls the public keys from the IdP's JWKS endpoint and verifies signature, expiration, audience and any required claims before forwarding the request.
+
+To swap providers, just point `jwk_url` (and `issuer`/`audience` if needed) at your IdP. No code changes on the backends — they keep receiving plain HTTP with the validated claims already enforced upstream.
+
+For a working example with role-based access, see the [`/private/moderate`](/demo/use-cases/private-moderate) and [`/private/custom`](/demo/use-cases/private-custom) endpoints.
 
 export default function MDXPage({ children }) {
-  return <IntegrationLayout>{children}</IntegrationLayout>
+  return <IntegrationLayout resources={resources}>{children}</IntegrationLayout>
 }

@@ -1,13 +1,31 @@
 import IntegrationLayout from '@/components/IntegrationLayout';
 
-## About this demo
-The API key authentication enables a Role-Based Access Control (RBAC) mechanism by reading the Authorization header of incoming requests.
+export const resources = {
+  docs: [
+    { url: "https://www.krakend.io/docs/enterprise/authentication/api-keys/", label: "API Keys" }
+  ]
+};
 
-## Command
-```
+## About this demo
+
+API Key authentication on Enterprise adds role-based access control on top of the OSS version: each key carries one or more roles, and endpoints declare which roles can access them. Keys live at service level in the gateway config and never touch the backends.
+
+## Try it
+
+A successful call (valid key, role `admin`):
+
+```bash
 curl -iG -H 'Authorization: Bearer 58427514-be32-0b52-b7c6-d01fada30497' http://localhost:8080/api-key
 ```
 
+Same call without a key returns `401`:
+
+```bash
+curl -iG http://localhost:8080/api-key
+```
+
+See the [`/api-key` use case](/demo/use-cases/api-key) for the endpoint configuration block.
+
 export default function MDXPage({ children }) {
-  return <IntegrationLayout>{children}</IntegrationLayout>
+  return <IntegrationLayout resources={resources}>{children}</IntegrationLayout>
 }
